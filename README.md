@@ -11,12 +11,12 @@ THIS SCRIPT IS EXPERIMENTAL
 
 It can be tested with:
 
-'''docker-compose up -d'''
+```docker-compose up -d```
 
 Subsequently, you can check to see how you're doing with
 
-'''docker-compose logs backend'''
+```docker-compose logs backend```
 
 or
 
-'''docker-compose logs db'''
+```docker-compose logs db```
