@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  db:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'db'
+      MYSQL_USER: 'TEAM6'
+      MYSQL_PASSWORD: 'docker'
+      MYSQL_ROOT_PASSWORD: 'toor'
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - sql_db:/var/lib/mysql
+  backend:
+    image: backend
+    depends_on:
+      - db
+    build:
+      context: ./backend
+      dockerfile: backend.dockerfile
+volumes:
+  sql_db:
