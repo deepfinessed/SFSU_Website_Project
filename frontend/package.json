@@ -10,6 +10,7 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
+    "aws-demo-start": "next start -p 80",
     "lint": "eslint . --ext .ts,.tsx"
   },
   "husky": {

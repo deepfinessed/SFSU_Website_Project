@@ -14,9 +14,10 @@ services:
     depends_on:
       - db
     ports:
-      - '3000:3000'
-      - '80:80'
+      - '4000:4000'
   frontend:
-    
+    image: 388525456538.dkr.ecr.us-west-1.amazonaws.com/csc648frontend
+    ports:
+      - '80:80'
 volumes:
   sql_db:
