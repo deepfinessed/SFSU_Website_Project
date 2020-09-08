@@ -27,8 +27,8 @@ services:
     build:
       context: ./frontend
       dockerfile: frontend.dockerfile
-    ports:
-      - '3000:3000'
+    expose:
+      - '3000'
   nginx:
     image: nginx:latest
     volumes:
