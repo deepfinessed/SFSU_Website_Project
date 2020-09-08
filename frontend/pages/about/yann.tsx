@@ -3,7 +3,7 @@ import React from 'react';
 import { Container } from '@components/Layouts';
 import { Avatar, Link, Text } from '@components/DataDisplay';
 
-const Nate = (): JSX.Element => {
+const Yann = (): JSX.Element => {
   return (
     <Container align="center">
       <Avatar src="/yann.jpg" alt="Yann" size={200} />
@@ -24,7 +24,7 @@ const Nate = (): JSX.Element => {
             @ermes
           </Link>
           <br />
-          Mobile Freelance&nbsp;
+          Freelance Mobile Developer&nbsp;
           <Link href="https://shareview.fr" newTab>
             @shareview
           </Link>
@@ -53,4 +53,4 @@ const Nate = (): JSX.Element => {
   );
 };
 
-export default Nate;
+export default Yann;
