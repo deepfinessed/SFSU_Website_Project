@@ -2,6 +2,8 @@ import React from 'react';
 
 import { uuid } from '@utils';
 
+import { FlexContent } from '@types';
+
 import { Container } from '@components/Layouts';
 import { Avatar, Link, Text } from '@components/DataDisplay';
 
@@ -10,8 +12,9 @@ const About = (): JSX.Element => {
     { pic: '/lauren.jpg', name: 'Lauren' },
     { pic: '/nate.png', name: 'Nate' },
     { pic: '/yann.jpg', name: 'Yann' },
-    { pic: '/Jair.png', name: 'Jair' },
+    { pic: '/jair.png', name: 'Jair' },
     { pic: '/alvaro.png', name: 'Alvaro' },
+    { pic: '/duy.png', name: 'Duy', align: 'stretch' },
   ];
 
   return (
@@ -24,7 +27,7 @@ const About = (): JSX.Element => {
               size={120}
               src={e.pic}
               alt={e.name}
-              align="flex-start"
+              align={(e.align as FlexContent) ?? 'flex-start'}
               label={e.name}
               gap={8}
             />
