@@ -3,11 +3,11 @@ import React from 'react';
 import { Container } from '@components/Layouts';
 import { Text } from '@components/DataDisplay';
 
-const LaurenAbout = (): JSX.Element => {
+const Lauren = (): JSX.Element => {
   return (
     <Container align="center">
       <Text variant="h1">Lauren Wong</Text>
-      <img src="/Lauren.jpg" alt="Lauren" />
+      <img src="/lauren.jpg" alt="Lauren" />
       <Text variant="h4">
         Senior at SFSU studying Computer Science
         <br />
@@ -21,4 +21,4 @@ const LaurenAbout = (): JSX.Element => {
   );
 };
 
-export default LaurenAbout;
+export default Lauren;

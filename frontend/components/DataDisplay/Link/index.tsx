@@ -6,6 +6,7 @@ import StyledLink from './style';
 
 interface LinkProps extends NextLinkProps {
   children: ReactNode;
+  newTab?: boolean;
 }
 
 const Link = ({
@@ -14,6 +15,7 @@ const Link = ({
   replace,
   scroll,
   shallow,
+  newTab = false,
 }: LinkProps): JSX.Element => {
   return (
     <NextLink
@@ -23,7 +25,7 @@ const Link = ({
       scroll={scroll}
       shallow={shallow}
     >
-      <StyledLink>{children}</StyledLink>
+      <StyledLink target={newTab ? '_blank' : '_self'}>{children}</StyledLink>
     </NextLink>
   );
 };

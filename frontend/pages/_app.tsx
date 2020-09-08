@@ -1,6 +1,7 @@
 import React from 'react';
-import { Moon, Sun } from 'react-feather';
+import { Moon, Sun, ArrowLeftCircle } from 'react-feather';
 import { AppProps } from 'next/app';
+import Router from 'next/router';
 import { ThemeProvider } from 'styled-components';
 
 import { useMounted } from '@hooks';
@@ -24,10 +25,21 @@ const AppContent = ({ Component, pageProps }: AppProps): JSX.Element => {
 
   return (
     <ThemeProvider theme={{ mode: scheme }}>
-      <Container row justify="flex-end">
-        <Sun size={16} color={theme.cvar('colorForeground')} />
-        <Toggle toggled={scheme === 'dark'} onChange={(): void => toggle()} />
-        <Moon size={16} color={theme.cvar('colorForeground')} />
+      <Container row justify="space-between">
+        {Router.route !== '/' && (
+          <Container>
+            <ArrowLeftCircle
+              style={{ cursor: 'pointer' }}
+              onClick={(): void => Router.back()}
+              color={theme.cvar('colorForeground')}
+            />
+          </Container>
+        )}
+        <Container row justify="flex-end">
+          <Sun size={16} color={theme.cvar('colorForeground')} />
+          <Toggle toggled={scheme === 'dark'} onChange={(): void => toggle()} />
+          <Moon size={16} color={theme.cvar('colorForeground')} />
+        </Container>
       </Container>
       {/* eslint-disable-next-line react/jsx-props-no-spreading */}
       <Component {...pageProps} />
@@ -35,7 +47,7 @@ const AppContent = ({ Component, pageProps }: AppProps): JSX.Element => {
   );
 };
 
-export default (props: AppProps): JSX.Element => {
+const App = (props: AppProps): JSX.Element => {
   return (
     <ThemeContext>
       {/* eslint-disable-next-line react/jsx-props-no-spreading */}
@@ -43,3 +55,5 @@ export default (props: AppProps): JSX.Element => {
     </ThemeContext>
   );
 };
+
+export default App;

@@ -1,12 +1,25 @@
 import React from 'react';
 
+import { theme } from '@utils';
+
 import { Container } from '@components/Layouts';
-import { Text } from '@components/DataDisplay';
+import { Link, Text } from '@components/DataDisplay';
+import { Button } from '@components/Inputs';
 
 const Home = (): JSX.Element => {
   return (
     <Container align="center">
       <Text variant="h1">CSC648 - Team 6</Text>
+      <Text variant="h4">
+        Discover the&nbsp;
+        <Text variant="small" color={theme.cvar('colorLink')}>
+          dream team
+        </Text>
+        &nbsp;below!
+      </Text>
+      <Link href="/about">
+        <Button variant="secondary">Dream Team</Button>
+      </Link>
     </Container>
   );
 };

@@ -1,14 +1,13 @@
 import React from 'react';
 
 import { Container } from '@components/Layouts';
-import { Text } from '@components/DataDisplay';
-import Link from 'next/link';
+import { Link, Text } from '@components/DataDisplay';
 
 const Nate = (): JSX.Element => {
   return (
     <Container align="center">
       <Text variant="h1">Nate Munger</Text>
-      <img src="/Nate.png" alt="Nate" />
+      <img src="/nate.png" alt="Nate" />
       <Container align="center" gap={3}>
         <Text variant="h4">
           Senior at SFSU studying computer science
@@ -21,7 +20,9 @@ const Nate = (): JSX.Element => {
         </Text>
       </Container>
       <Text variant="h3">
-        <Link href="https://github.com/deepfinessed">Github</Link>
+        <Link href="https://github.com/deepfinessed" newTab>
+          Github
+        </Link>
       </Text>
     </Container>
   );

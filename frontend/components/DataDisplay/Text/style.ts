@@ -17,6 +17,7 @@ export interface StyledTextProps {
   weight: FontWeight;
   italic: boolean;
   bold: boolean;
+  align: 'left' | 'center' | 'right';
 }
 
 export const StyledText = styled.text<StyledTextProps>`
@@ -26,6 +27,12 @@ export const StyledText = styled.text<StyledTextProps>`
   font-weight: ${({ weight }): FontWeight => weight};
   font-style: ${({ italic }): string => (italic ? 'italic' : 'normal')};
   font-family: Montserrat, sans-serif;
+  text-align: ${({ align }): string => align};
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  small {
+    font-size: inherit;
+    font-weight: inherit;
+  }
 `;
