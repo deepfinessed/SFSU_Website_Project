@@ -5,4 +5,4 @@ RUN npm install
 COPY . .
 RUN npm run build
 EXPOSE 3000
-CMD [ "npm", "run", "aws-demo-start"]
+CMD [ "npm", "run", "start"]
