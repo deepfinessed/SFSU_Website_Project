@@ -23,6 +23,8 @@ services:
       dockerfile: backend.dockerfile
     volumes:
       - ./backend/prisma/migrations/:/usr/src/application/backend/prisma/migrations/
+      - ./backend/node_modules/.prisma/:/usr/src/application/backend/node_modules/.prisma
+      - ./backend/node_modules/@prisma/:/usr/src/application/backend/node_modules/@prisma
     ports:
       - '4000:3000'
   frontend:
