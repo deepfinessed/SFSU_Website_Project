@@ -19,7 +19,13 @@ or
 
 ```docker-compose logs db```
 
-To deploy the app inside the server, use ```deploy.sh```  .
+To deploy the app inside the server, use ```deploy.sh```  .  
+
+After pulling significant changes, particularly to dockerfiles,
+you may need to order Docker to rebuild your containers. To do this,
+use  
+
+```docker-compose build```.  
 
 ## Prisma/Database
 
@@ -34,5 +40,7 @@ a name for your migration. For example:
 
 would create a migration named User.
 
-By default, launching the app uses the most updated database migration.
+By default, launching the app uses the most updated database migration.  
 
+Right now, the backend also runs a few tests on the database on launch. Be sure
+to check that these tests pass.
