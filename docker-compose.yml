@@ -29,6 +29,8 @@ services:
       - ./backend/node_modules/@prisma/:/usr/src/application/backend/node_modules/@prisma
     ports:
       - '4000:3000'
+    expose:
+      - '4000'
   frontend:
     build:
       context: ./frontend
@@ -45,6 +47,9 @@ services:
     ports:
       - '80:80'
       - '443:443'
+    depends_on:
+      - backend
+      - frontend
 
 volumes:
   sql_db:
