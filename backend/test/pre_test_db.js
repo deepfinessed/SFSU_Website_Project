@@ -2,7 +2,7 @@ import Prisma from '@prisma/client';
 import ChaiPkg from 'chai'
 import Mocha from 'mocha'
 
-import loadCounties from "../utils/counties.js";
+import makeDB from "../utils/make-db.js";
 
 const {PrismaClient} = Prisma
 const {describe, it} = Mocha
@@ -50,14 +50,16 @@ describe("Testing database", () => {
             if(county == null) {
                 console.log("Failed to find San Mateo County");
                 console.log("Perhaps county data has not been loaded - ");
-                loadCounties();
+                console.log("Attempting to load the database now - restart the app to have changes take effect");
+                console.log("DB loading can also be initiated inside the container with npm run make-db");
+                await makeDB();
                 county = await prisma.county.findOne({
                     where: {
                         name: "San Mateo County",
                     },
                 });
                 //disgusting I know, but there appeared to be a race condition and this is only run once
-                setTimeout(() => expect(county.name).to.equal("San Mateo County"), 1000);
+                setTimeout(() => expect(county.name).to.equal("San Mateo County"), 5000);
             } else {
                 expect(county.name).to.equal("San Mateo County");
             }

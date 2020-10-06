@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www.js",
-    "test": "mocha --reporter spec --exit"
+    "test": "mocha --reporter spec --exit",
+    "make-db": "node ./utils/make-db.js"
   },
   "dependencies": {
     "@types/chai": "^4.2.12",
