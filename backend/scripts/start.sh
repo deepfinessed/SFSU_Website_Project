@@ -8,4 +8,4 @@ npx prisma generate
 # run tests
 npm test
 # start the backend
-node ./bin/www
+npm start

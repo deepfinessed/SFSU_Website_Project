@@ -4,11 +4,14 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
-    "test": "mocha --reporter spec"
+    "start": "node ./bin/www.js",
+    "test": "mocha --reporter spec --exit",
+    "make-db": "node ./utils/make-db.js"
   },
   "dependencies": {
     "@types/chai": "^4.2.12",
+    "@types/express": "^4.17.8",
+    "@types/node": "^14.11.2",
     "chai": "^4.2.0",
     "cookie-parser": "~1.4.4",
     "csv-parser": "^2.3.3",

@@ -6,4 +6,4 @@ const prisma = new PrismaClient();
 
 await prisma.$executeRaw('TRUNCATE _Migration');
 
-process.exit();
+process.exit(0);
