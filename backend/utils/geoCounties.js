@@ -27,10 +27,6 @@ function updateCountyGeoData() {
                     }
                 }
             });
-            console.log("Latitude: " + row.Latitude);
-            console.log("Parsed Latitude: " + parseFloat(row.Latitude));
-            console.log("Longitude: : " + row.Longitude);
-            console.log("Parsed Longitude: " + parseFloat(row.Longitude));
             let updated = await prisma.county.update({
                 where: {
                     id: counties[0].id
@@ -40,7 +36,6 @@ function updateCountyGeoData() {
                     longitude: parseFloat(row.Longitude)
                 }
             });
-            console.log(updated);
         })
     );
 }
