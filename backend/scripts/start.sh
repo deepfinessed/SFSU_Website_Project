@@ -2,7 +2,7 @@
 
 set -e
 # upgrade to most recent migration
-npx prisma migrate up --experimental
+npx prisma migrate up --auto-approve --experimental
 # update generator
 npx prisma generate
 # run tests
