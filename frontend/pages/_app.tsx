@@ -12,8 +12,9 @@ import ThemeContext, { useTheme } from '@contexts/ThemeContext';
 import { Toggle } from '@components/Inputs';
 import { Container } from '@components/Layouts';
 
-import 'styles/fonts.css';
+// import 'styles/fonts.css';
 import 'styles/main.css';
+import 'node_modules/leaflet/dist/leaflet.css';
 
 const AppContent = ({ Component, pageProps }: AppProps): JSX.Element => {
   const mounted = useMounted();
