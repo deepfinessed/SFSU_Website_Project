@@ -1,0 +1,108 @@
+tags:
+  name: Counties
+  description: Provides county level data
+components:
+  schemas:
+    County:
+      type: object
+      required:
+        - name
+      properties:
+        id:
+          type: integer
+          description: Auto generated ID
+        population:
+          type: integer
+          description: Population of county
+        name:
+          type: string
+          description: County name
+        area:
+          type: number
+          description: Area of county in square miles
+        latitude:
+          type: number
+          description: Latitude
+        longitude:
+          type: number
+          description: Longitude
+        covidRecords:
+          type: array
+          items:
+            $ref: '#/components/schemas/CovidRecord'
+        fireRecords:
+          type: array
+          items:
+            $ref: '#/components/schemas/FireRecord'
+    CovidRecord:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Auto generated id
+        cases:
+          type: integer
+          description: Number of COVID cases
+        deaths:
+          type: integer
+          description: Number of COVID deaths
+        icu:
+          type: integer
+          description: Number of ICU cases
+        hosp:
+          type: integer
+          description: Number of hospitalizations
+        date:
+          type: string
+          format: date-time
+          description: Date of record
+    FireRecord:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Auto generated id
+        start_date:
+          type: string
+          format: date-time
+        end_date:
+          type: string
+          format: date-time
+        aqi:
+          type: integer
+          description: Air Quality Index
+        EvacuationLevel:
+          type: integer
+        area:
+          type: number
+          description: Area of fire in square miles
+        active:
+          type: boolean
+        name:
+          type: string
+paths:
+  /counties/:
+    get:
+      summary: Gets county level data
+      tags: [Counties]
+      parameters:
+        - in: query
+          name: type
+          schema:
+            type: string
+            enum: [covid, fire, all]
+          description: Type of records desired
+        - in: query
+          name: name
+          schema:
+            type: string
+          description: Name of desired county. Will return all names containing {name}. If none is provided, returns all counties.
+      responses:
+        "200":
+          description: Matching Counties
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/County'
