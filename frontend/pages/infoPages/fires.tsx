@@ -17,13 +17,23 @@ const Fires = (): JSX.Element => {
       if (initialized) {
         return;
       }
-
       const leaflet = await import('leaflet');
       const L = leaflet;
-      // change this to county latlng
-      setLongLat([38.06, -122.73, 0]);
+      const currCounty = router.query.county;
+      const url = process.env.NEXT_PUBLIC_BASE_URL;
 
-      const mymap = L.map('mapid').setView(L.latLng(LongLat), 8);
+      const currLongLat: [number, number, number] = [0, 0, 0];
+      const fetchUrl = `http://${url}/api/counties/?type=all&name=${currCounty}`;
+
+      const mymap = L.map('mapid').setView(L.latLng(currLongLat), 8);
+
+      await fetch(fetchUrl)
+        .then((response) => response.json())
+        .then((data) => {
+          currLongLat[0] = data[0].latitude;
+          currLongLat[1] = data[0].longitude;
+          setLongLat([data[0].longitude, data[0].latitude, 0]);
+        });
 
       await fetch(firePerimGeoJSON)
         .then((response) => response.json())
@@ -31,6 +41,7 @@ const Fires = (): JSX.Element => {
           const myLayer = L.geoJSON().addTo(mymap);
           myLayer.addData(data);
         });
+
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         minZoom: 5,
         maxZoom: 18,
@@ -38,7 +49,8 @@ const Fires = (): JSX.Element => {
         tileSize: 512,
         zoomOffset: -1,
       }).addTo(mymap);
-
+      const temp = L.latLng(currLongLat);
+      mymap.setView(temp, 12);
       const CalBounds = L.latLngBounds(
         L.latLng(32.534156, -124.409591), // Southwest
         L.latLng(42.009518, -114.131211) // Northeast
@@ -46,10 +58,11 @@ const Fires = (): JSX.Element => {
 
       mymap.setMaxBounds(CalBounds);
       mymap.fitBounds(CalBounds);
+      mymap.setView(temp, 10);
     }
     loadMap();
     setInit(true);
-  }, [initialized, LongLat]);
+  }, [initialized, LongLat, router.query.county]);
 
   return (
     <div>
@@ -57,6 +70,8 @@ const Fires = (): JSX.Element => {
         <Text variant="h3">Fires</Text>
         County:
         {router.query.county || 'Not Specified'}
+        <br />
+        {LongLat}
       </Container>
       <div id="mapid" style={{ height: '500px' }} />
     </div>
