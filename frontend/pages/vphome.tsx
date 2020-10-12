@@ -6,7 +6,7 @@ import { Button } from '@components/Inputs';
 
 const VPHome = (): JSX.Element => {
   const [infoType, setInfoType] = useState('corona');
-  const [county, setCounty] = useState('Marin');
+  const [county, setCounty] = useState('');
   return (
     <Container align="center">
       <Text variant="h3">Home test for vertical prototype</Text>
@@ -26,6 +26,7 @@ const VPHome = (): JSX.Element => {
         <option value="corona">Corona Virus</option>
         <option value="fires">Fires</option>
       </select>
+      <div>Leave blank for list of all counties.</div>
       <Link
         href={{
           pathname: `/infoPages/${infoType}`,

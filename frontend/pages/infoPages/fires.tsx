@@ -11,6 +11,7 @@ const Fires = (): JSX.Element => {
   const [initialized, setInit] = useState(false);
   const currCoords: [number, number, number] = [0, 0, 0];
   const [LongLat, setLongLat] = useState(currCoords);
+  const [CountyNames, setCountyNames] = useState(['']);
 
   useEffect(() => {
     async function loadMap() {
@@ -60,7 +61,26 @@ const Fires = (): JSX.Element => {
       mymap.fitBounds(CalBounds);
       mymap.setView(temp, 10);
     }
-    loadMap();
+    async function printEmpty() {
+      const countyNames = [''];
+      const url = process.env.NEXT_PUBLIC_BASE_URL;
+      const fetchUrl = `http://${url}/api/counties/?type=all`;
+
+      await fetch(fetchUrl)
+        .then((response) => response.json())
+        .then((data) => {
+          for (let i = 0; i < data.length; i + 1) {
+            countyNames.push(data[i].name);
+          }
+        });
+      setCountyNames(countyNames);
+    }
+    if (router.query.county === '') {
+      printEmpty();
+    } else {
+      loadMap();
+    }
+
     setInit(true);
   }, [initialized, LongLat, router.query.county]);
 
@@ -73,6 +93,11 @@ const Fires = (): JSX.Element => {
         <br />
         {LongLat}
       </Container>
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        {CountyNames.map((str) => {
+          return <div key={str}>{str}</div>;
+        })}
+      </div>
       <div id="mapid" style={{ height: '500px' }} />
     </div>
   );
