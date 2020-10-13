@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node ./bin/www.js",
     "test": "mocha --reporter spec --exit",
-    "make-db": "node ./utils/make-db.js"
+    "make-db": "node ./utils/make-db.js",
+    "vertical-prototype-db": "node ./utils/populate-vertical-prototype.js",
+    "empty-db": "node ./utils/empty-db.js"
   },
   "dependencies": {
     "@types/chai": "^4.2.12",
