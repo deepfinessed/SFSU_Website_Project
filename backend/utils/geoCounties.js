@@ -38,7 +38,7 @@ function updateCountyGeoData() {
                     }
                 }).catch(error => console.log(`Failed to parse ${value}`));
             } else{
-                console.log(`Error parsing ${row}`);
+                console.log(`Error parsing ${JSON.stringify(row)}`);
             }
         })
     );
