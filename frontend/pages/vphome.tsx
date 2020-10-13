@@ -9,7 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
 import { Container } from '@components/Layouts';
-import { Text } from '@components/DataDisplay';
+import { Link, Text } from '@components/DataDisplay';
 import { Button } from '@components/Inputs';
 import County from '../types/County';
 
@@ -52,11 +52,53 @@ const VPHome = (): JSX.Element => {
             {countyArray.map((countyEntry) => (
               <TableRow key={countyEntry.id}>
                 <TableCell component="th" scope="row">
-                  {countyEntry.name}
+                  <Link
+                    href={{
+                      pathname: `/infoPages/counties/${countyEntry.id}`,
+                      query: {
+                        type: infoType,
+                      },
+                    }}
+                  >
+                    {countyEntry.name}
+                  </Link>
                 </TableCell>
-                <TableCell>{countyEntry.population}</TableCell>
-                <TableCell>{countyEntry.latitude}</TableCell>
-                <TableCell>{countyEntry.longitude}</TableCell>
+                <TableCell>
+                  <Link
+                    href={{
+                      pathname: `/infoPages/counties/${countyEntry.id}`,
+                      query: {
+                        type: infoType,
+                      },
+                    }}
+                  >
+                    {countyEntry.population}
+                  </Link>
+                </TableCell>
+                <TableCell>
+                  <Link
+                    href={{
+                      pathname: `/infoPages/counties/${countyEntry.id}`,
+                      query: {
+                        type: infoType,
+                      },
+                    }}
+                  >
+                    {countyEntry.latitude}
+                  </Link>
+                </TableCell>
+                <TableCell>
+                  <Link
+                    href={{
+                      pathname: `/infoPages/counties/${countyEntry.id}`,
+                      query: {
+                        type: infoType,
+                      },
+                    }}
+                  >
+                    {countyEntry.longitude}
+                  </Link>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -68,7 +110,7 @@ const VPHome = (): JSX.Element => {
   return (
     <Container align="center">
       <Text variant="h3">Home test for vertical prototype</Text>
-      County:
+      <Text variant="h4">County:</Text>
       <input
         id="width"
         type="text"
@@ -76,7 +118,7 @@ const VPHome = (): JSX.Element => {
         onChange={(event) => setCounty(event.target.value)}
       />
       <br />
-      Info Selection:
+      <Text variant="h4">Info Selection:</Text>
       <select
         name="infoType"
         id="infoType"
