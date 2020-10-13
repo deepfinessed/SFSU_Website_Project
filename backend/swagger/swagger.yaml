@@ -85,9 +85,16 @@ paths:
     get:
       summary: Gets data for an individual county by id
       tags: [Counties]
+      parameters:
+        - in: query
+          name: type
+          schema:
+            type: string
+            enum: [covid, fire, all]
+          description: Type of records desired - defaults to all if omitted from query string
       responses:
         "200":
-          description: Matching County
+          description: Matching County -
           content:
             application/json:
               schema:
