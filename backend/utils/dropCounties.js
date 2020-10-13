@@ -4,6 +4,8 @@ const {PrismaClient} = Prisma;
 
 const prisma = new PrismaClient();
 
-await prisma.$executeRaw('DROP TABLE Counties');
+console.log("Deleting counties database...");
+const counties = await prisma.county.deleteMany({});
+console.log(`Deleted ${counties.count} counties`);
 
 setTimeout(() => process.exit(), 5000);
