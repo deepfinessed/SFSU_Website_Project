@@ -12,13 +12,14 @@ router.get('/:id', async function(req,res,next) {
     if(isNaN(id)){
         res.sendStatus(404);
     }
+    let recordType = req.query.type ? req.query.type : 'all';
     let county = await prisma.county.findOne({
         where: {
             id: id,
         },
         include: {
-            covidRecords: true,
-            fireRecords: true,
+            covidRecords: /covid|all/i.test(recordType),
+            fireRecords: /fire|all/i.test(recordType),
         },
     });
     if(county) {
