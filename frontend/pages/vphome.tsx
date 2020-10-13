@@ -24,9 +24,7 @@ const VPHome = (): JSX.Element => {
       name: county,
       type: infoType,
     };
-    const url = `http://${baseURL}/api/counties/?${queryString.stringify(
-      query
-    )}`;
+    const url = `${baseURL}/api/counties/?${queryString.stringify(query)}`;
     fetch(url)
       .then((response) => response.json())
       .then((data) => setCountyList(data));
