@@ -20,21 +20,20 @@ const Fires = (): JSX.Element => {
       }
       const leaflet = await import('leaflet');
       const L = leaflet;
-      const currCounty = router.query.id;
+      const currCounty = router.query.county;
       const url = process.env.NEXT_PUBLIC_BASE_URL;
 
       const currLongLat: [number, number, number] = [0, 0, 0];
-      const fetchUrl = `http://${url}/api/counties/?type=all&id=${currCounty}`;
-      console.log(fetchUrl);
+      const fetchUrl = `http://${url}/api/counties/?type=all&name=${currCounty}`;
+
       const mymap = L.map('mapid').setView(L.latLng(currLongLat), 8);
 
       await fetch(fetchUrl)
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
-          currLongLat[0] = data.latitude;
-          currLongLat[1] = data.longitude;
-          setLongLat([data.longitude, data.latitude, 0]);
+          currLongLat[0] = data[0].latitude;
+          currLongLat[1] = data[0].longitude;
+          setLongLat([data[0].longitude, data[0].latitude, 0]);
         });
 
       await fetch(firePerimGeoJSON)
