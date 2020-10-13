@@ -53,9 +53,6 @@ router.get('/', async function(req, res, next) {
 
     }
     const records = await prisma.county.findMany(queryObj);
-    if(records.length === 0) {
-        res.sendStatus(404);
-    }
     res.json(records);
 });
 
