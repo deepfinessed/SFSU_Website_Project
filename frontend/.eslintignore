@@ -1,2 +1,3 @@
 /next-env.d.ts
 /pages/_document.tsx
+/pages/infoPages/counties/*

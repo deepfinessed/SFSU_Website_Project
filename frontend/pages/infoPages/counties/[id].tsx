@@ -11,7 +11,8 @@ const CountyPage = (): JSX.Element => {
   const [initialized, setInit] = useState(false);
   const currCoords: [number, number, number] = [0, 0, 0];
   const [LongLat, setLongLat] = useState(currCoords);
-  const { countyId } = router.query;
+  const [countyName, setCountyName] = useState('');
+  const countyId = router.query.id;
 
   useEffect(() => {
     async function loadMap() {
@@ -33,6 +34,7 @@ const CountyPage = (): JSX.Element => {
           currLongLat[0] = data.latitude;
           currLongLat[1] = data.longitude;
           setLongLat([data.longitude, data.latitude, 0]);
+          setCountyName(data.name);
         });
 
       await fetch(firePerimGeoJSON)
@@ -69,7 +71,11 @@ const CountyPage = (): JSX.Element => {
   return (
     <div>
       <Container align="center">
-        <Text variant="h3">Fires</Text>
+        <Text variant="h3">
+          {router.query.type ? router.query.type : 'All'}
+          Data for County
+          {countyName}
+        </Text>
         County:
         {router.query.county || 'Not Specified'}
         <br />
