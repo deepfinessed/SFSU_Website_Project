@@ -73,12 +73,13 @@ const CountyPage = (): JSX.Element => {
       <Container align="center">
         <Text variant="h3">
           {router.query.type
-            ? router.query.type.charAt(0).toUpperCase() +
+            ? // @ts-ignore
+              router.query.type.charAt(0).toUpperCase() +
               router.query.type.slice(1) +
               ' '
             : 'All'}
           Data for
-          {'' + countyName}
+          {' ' + countyName}
         </Text>
         County:
         {router.query.county || 'Not Specified'}
