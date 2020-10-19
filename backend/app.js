@@ -9,6 +9,7 @@ import swaggerUI from 'swagger-ui-express';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
+import cors from 'cors';
 
 dotenv.config();
 
@@ -18,7 +19,7 @@ import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
 import countiesRouter from './routes/counties.js';
 
-var app = express();
+const app = express();
 
 const swaggerOptions = {
   definition: {
@@ -49,6 +50,12 @@ const swaggerOptions = {
 
 const specs = swaggerJSdoc(swaggerOptions);
 
+app.use(cors({
+  origin: '*',
+  allowedHeaders: 'Origin,X-Requested-With,Content-Type,Accept',
+  credentials: true,
+}));
+
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -64,6 +71,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
 
 app.use('/', indexRouter);
 app.use('/users/', usersRouter);
