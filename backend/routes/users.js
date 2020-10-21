@@ -17,7 +17,11 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/register/', async function (req,res,next) {
+  console.log("Recieved request:");
+  console.log(req.body);
   const {firstName, lastName, email, password, phone} = req.body;
+  console.log("Email parsed as:");
+  console.log(email);
   const oldUser = await prisma.user.findOne({
     where: {
       email: email,
@@ -30,33 +34,43 @@ router.post('/register/', async function (req,res,next) {
   const saltRounds = 12;
 
   let newUser;
-  bcrypt.hash(password, saltRounds, async (err, hash) => {
-    newUser = await prisma.user.create({
-      data: {
-        email: email,
-        firstName: firstName,
-        lastName: lastName,
-        passwordHash: hash,
-        phone: phone,
-        access: 'standard',
-      },
+  try{
+    bcrypt.hash(password, saltRounds, async (err, hash) => {
+      newUser = await prisma.user.create({
+        data: {
+          email: email,
+          firstName: firstName,
+          lastName: lastName,
+          passwordHash: hash,
+          phone: phone,
+          access: 'standard',
+        },
+      });
     });
-  });
+  } catch(err){
+    res.sendStatus(422);
+  }
+
   res.sendStatus(201);
 });
 
 router.post('/login/', async function(req, res, next) {
+  console.log("Received request:")
+  console.log(req.body)
   const {email, password} = req.body;
-  const user = prisma.user.findOne({
+  const user = await prisma.user.findOne({
     where: {
       email: email,
     }
   });
+  console.log("Found user as:")
+  console.log(user);
   if(!user){
     res.status(422).send('There is no user with that email');
   }
   bcrypt.compare(password, user.passwordHash, (err, result) => {
     if(err || !result){
+      console.log(err ? err : result);
       res.sendStatus(401);
     }
     const accessToken = makeAccessJWT(user);
@@ -69,7 +83,7 @@ router.post('/login/', async function(req, res, next) {
     res.cookie('refresh_token', refreshToken, {
       httpOnly: true,
       maxAge: 1000 * 3600 * 24 * 365,
-      path: '/users/refresh/'
+      path: '/api/users/refresh/'
     });
     res.json(payload);
   });
@@ -77,7 +91,9 @@ router.post('/login/', async function(req, res, next) {
 
 router.post('/refresh/', async function(req, res, next) {
   const token = req.cookies.refresh_token;
-  if(!token){
+  console.log("Received refresh token as:");
+  console.log(token);
+  if(token === undefined){
     res.sendStatus(401);
   }
   jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
