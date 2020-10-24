@@ -5,10 +5,15 @@ import { theme } from '@utils';
 import { Container } from '@components/Layouts';
 import { Link, Text } from '@components/DataDisplay';
 import { Button } from '@components/Inputs';
+import { AlignCenter, AlignRight } from 'react-feather';
+
 
 const Home = (): JSX.Element => {
   return (
     <Container align="center">
+      <Link href="/Register">
+        <Button variant="secondary"> Register</Button>
+      </Link>
       <Text variant="h1">CSC648 - Team 6</Text>
       <Text variant="h4">
         Discover the&nbsp;
@@ -23,7 +28,7 @@ const Home = (): JSX.Element => {
       <Link href="/vphome">
         <Button variant="secondary">Home for vp</Button>
       </Link>
-    </Container>
+    </Container> 
   );
 };
 
