@@ -2,13 +2,18 @@ import React from 'react';
 import { Field, Formik } from 'formik';
 import { Container } from '@components/Layouts';
 import { InputField } from '../components/InputFields';
+import { Link, Text } from '@components/DataDisplay';
+import { Button } from '@components/Inputs';
+
+
 
 const Register = (): JSX.Element => {
   return (
     <Container align="center">
+      <Text variant="h1">Registration</Text>
       <Formik
-        onSubmit={(data) => {
-          return data;
+        onSubmit={data => {
+          console.log(data);
         }}
         initialValues={{
           email: '',
@@ -45,15 +50,18 @@ const Register = (): JSX.Element => {
 
             <div>
               <Field
-                name="email"
-                required
-                pattern="/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/"
+                name="email" required
                 placeholder="email"
                 component={InputField}
               />
             </div>
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js" />
             <div>
+              <Field 
+              name="phonenumer" required
+              placeholder="phone number"
+              component={InputField}
+              />
               <Field
                 name="password"
                 required
@@ -62,6 +70,7 @@ const Register = (): JSX.Element => {
                 component={InputField}
               />
             </div>
+            <div>
             <Field
               name="confirm_password"
               required
@@ -69,6 +78,7 @@ const Register = (): JSX.Element => {
               type="password"
               id="message"
             />
+            </div>
             <div>
               <Field
                 name="address"
@@ -109,6 +119,12 @@ const Register = (): JSX.Element => {
           </form>
         )}
       </Formik>
+      <Text variant="h6">Already Registered?</Text>
+      <Link href="/LoginPage">
+        <Button variant="secondary"> Login</Button>
+      </Link>
+
+
     </Container>
   );
 };
