@@ -20,16 +20,18 @@ const Login = (): JSX.Element => {
                     <form onSubmit={handleSubmit}>
                         <div>
                             <Field
-                                name="firstName"
-                                placeholder="firstName"
+                                name="email"
+                                placeholder="email"
+                                pattern="/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/" required
                                 component={InputField}
                             />
                         </div>
 
                         <div>
                             <Field
-                                name="lastName"
-                                placeholder="lastName"
+                                name="password" required
+                                placeholder="password"
+                                type="password" 
                                 component={InputField}
                             />
                         </div>
