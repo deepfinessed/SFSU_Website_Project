@@ -2,11 +2,14 @@ import React from 'react';
 import { Field, Formik } from "formik";
 import { InputField } from "../components/InputFields";
 import { Container } from '@components/Layouts';
+import { Link, Text } from '@components/DataDisplay';
+
 
 
 const Login = (): JSX.Element => {
     return (
         <Container align='center'>
+            <Text variant="h1">Login</Text>
             <Formik
                 onSubmit={data => {
                     console.log(data);

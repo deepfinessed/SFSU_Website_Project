@@ -2,17 +2,18 @@ import React from 'react';
 import { Field, Formik } from "formik";
 import { InputField } from "../components/InputFields";
 import { Container } from '@components/Layouts';
-
+import { Link, Text } from '@components/DataDisplay';
+import { Button } from '@components/Inputs';
 
 
 
 const Register = (): JSX.Element => {
   return (
     <Container align="center">
-
+      <Text variant="h1">Registration</Text>
       <Formik
         onSubmit={data => {
-            console.log(data);
+          console.log(data);
         }}
         initialValues={{
           email: "",
@@ -48,13 +49,17 @@ const Register = (): JSX.Element => {
             <div>
               <Field
                 name="email" required
-                pattern="/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/" 
                 placeholder="email"
                 component={InputField}
               />
             </div>
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
             <div>
+              <Field 
+              name="phonenumer" required
+              placeholder="phone number"
+              component={InputField}
+              />
               <Field
                 name="password" required
                 placeholder="password"
@@ -62,12 +67,14 @@ const Register = (): JSX.Element => {
                 component={InputField}
               />
             </div>
+            <div>
             <Field
               name="confirm_password" required
               placeholder="confirm password"
               type="password"
               id='message'
             />
+            </div>
             <div>
               <Field
                 name="address" required
@@ -106,6 +113,12 @@ const Register = (): JSX.Element => {
           </form>
         )}
       </Formik>
+      <Text variant="h6">Already Registered?</Text>
+      <Link href="/LoginPage">
+        <Button variant="secondary"> Login</Button>
+      </Link>
+
+
     </Container>
   );
 };
