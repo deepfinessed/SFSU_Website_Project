@@ -14,7 +14,7 @@ async function makeDB(){
     if(county == null) {
         console.log("Failed to find San Mateo County");
         console.log("Perhaps county data has not been loaded - ");
-        loadCounties();
+        await loadCounties();
         county = await prisma.county.findOne({
             where: {
                 name: "San Mateo County",
@@ -24,6 +24,8 @@ async function makeDB(){
     console.log("Updating Geodata");
     updateGeoData();
     console.log("Update finished");
+
+    setTimeout(() => process.exit(), 5000);
 }
 
 export default makeDB;

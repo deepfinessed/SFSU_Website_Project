@@ -6,7 +6,7 @@ const {PrismaClient} = Prisma;
 
 
 
-function loadCounties() {
+async function loadCounties() {
     const prisma = new PrismaClient();
     const filePath = 'utils/CAcountyDataWiki.csv'
 
@@ -22,8 +22,8 @@ function loadCounties() {
             await prisma.county.create({
                 data: {
                     name: county.County,
-                    population: parseInt(county.Population.replace(',','')),
-                    area: parseFloat(county.Area.replace(',','')),
+                    population: parseInt(county.Population.replace(/,/g,'')),
+                    area: parseFloat(county.Area.replace(/,/g,'')),
                 }
             });
         })

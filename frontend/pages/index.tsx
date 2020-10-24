@@ -23,6 +23,12 @@ const Home = (): JSX.Element => {
       <Link href="/vphome">
         <Button variant="secondary">Home for vp</Button>
       </Link>
+      <Link href="/test">
+        <Button variant="secondary">test</Button>
+      </Link>
+      <Link href="/CovidDisplay">
+        <Button variant="secondary">Covid Display</Button>
+      </Link>
     </Container>
   );
 };
