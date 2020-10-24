@@ -2,17 +2,26 @@ import React from 'react';
 import { Field, Formik } from "formik";
 import { InputField } from "../components/InputFields";
 import { Container } from '@components/Layouts';
-import { Link, Text } from '@components/DataDisplay';
+import { Text } from '@components/DataDisplay';
 
 
 
 const Login = (): JSX.Element => {
+    const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+    const url = `${baseURL}/api/users/login`;
     return (
+
         <Container align='center'>
             <Text variant="h1">Login</Text>
             <Formik
                 onSubmit={data => {
-                    console.log(data);
+                    console.log(JSON.stringify(data));
+                    fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    }).then((response) => console.log(response));
+
                 }}
                 initialValues={{
                     email: "",
@@ -34,7 +43,7 @@ const Login = (): JSX.Element => {
                             <Field
                                 name="password" required
                                 placeholder="password"
-                                type="password" 
+                                type="password"
                                 component={InputField}
                             />
                         </div>
