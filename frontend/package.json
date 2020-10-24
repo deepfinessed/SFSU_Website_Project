@@ -31,6 +31,7 @@
     "@types/react-leaflet": "^2.5.2",
     "chart.js": "^2.9.4",
     "env-cmd": "^10.1.0",
+    "formik": "^2.2.1",
     "leaflet": "^1.7.1",
     "next": "^9.4.4",
     "query-string": "^6.13.5",

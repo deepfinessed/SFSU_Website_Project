@@ -9,6 +9,12 @@ import { Button } from '@components/Inputs';
 const Home = (): JSX.Element => {
   return (
     <Container align="center">
+      <Link href="/Register">
+        <Button variant="secondary"> Register</Button>
+      </Link>
+      <Link href="/LoginPage">
+        <Button variant="secondary"> Login </Button>
+      </Link>
       <Text variant="h1">CSC648 - Team 6</Text>
       <Text variant="h4">
         Discover the&nbsp;
