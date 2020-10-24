@@ -8,24 +8,38 @@ import { Button } from '@components/Inputs';
 
 
 const Register = (): JSX.Element => {
+  const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+  const url = `${baseURL}/api/users/register/`; 
   return (
     <Container align="center">
       <Text variant="h1">Registration</Text>
       <Formik
         onSubmit={data => {
-          console.log(data);
-        }}
+          console.log(JSON.stringify(data));
+          if (data.password !== data.confirm_password){
+            alert("passwords do not match"); 
+            return; 
+
+          }
+          fetch(url, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        }).then((response) => console.log(response));
+      }
+    }
+        
         initialValues={{
           email: '',
           firstName: '',
           lastName: '',
           password: '',
           confirm_password: '',
-          phonenumber: '',
-          address: '',
-          county: '',
-          zipcode: '',
-          city: '',
+          phone: '',
+          // address: '',
+          // county: '',
+          // zipcode: '',
+          // city: '',
         }}
       >
         {({ handleSubmit }) => (
@@ -58,7 +72,7 @@ const Register = (): JSX.Element => {
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js" />
             <div>
               <Field 
-              name="phonenumer" required
+              name="phone" required
               placeholder="phone number"
               component={InputField}
               />
@@ -79,7 +93,7 @@ const Register = (): JSX.Element => {
               id="message"
             />
             </div>
-            <div>
+            {/* <div>
               <Field
                 name="address"
                 required
@@ -113,7 +127,7 @@ const Register = (): JSX.Element => {
                 placeholder="city"
                 component={InputField}
               />
-            </div>
+            </div> */}
 
             <button type="submit">submit</button>
           </form>

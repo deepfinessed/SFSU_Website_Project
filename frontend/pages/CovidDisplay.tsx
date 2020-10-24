@@ -1,16 +1,15 @@
 import React, { useEffect } from 'react';
 
 import { Container } from '@components/Layouts';
-import { Link, Text } from '@components/DataDisplay';
-import { Button } from '@components/Inputs';
-import { Input } from '@material-ui/core';
-import queryString from 'querystring';
+import { Text } from '@components/DataDisplay';
+
 import { Chart } from 'chart.js';
 
 const CovidDisplay = (): JSX.Element => {
   useEffect(() => {
-    const canvas = document.getElementById('myChart');
-    Chart(canvas, {
+    const canvas : any = document.getElementById('myChart');
+    const ctx = canvas.getContext("2d")
+    new Chart(ctx, {
       type: 'bar',
       data: {
         labels: ['Date 1', 'Date 2', 'Date 3'],
