@@ -1,8 +1,38 @@
 tags:
-  name: Counties
-  description: Provides county level data
+  - name: Counties
+    description: Provides county level data
+  - name: Users
+    description: Provides functionality for registering and authenticating users
 components:
   schemas:
+    LoginTokenResponse:
+      type: object
+      required:
+        - access_token
+        - token_type
+        - refresh_token
+      properties:
+        access_token:
+          type: string
+          description: Base64 encoded signed access JWT
+        token_type:
+          type: string
+          description: Type of token returned. For now, will always be Bearer.
+        refresh_token:
+          type: string
+          description: Describes location of response_token in cookie.
+    RefreshTokenResponse:
+      type: object
+      required:
+        - access_token
+        - token_type
+      properties:
+        access_token:
+          type: string
+          description: Base64 encoded signed access JWT
+        token_type:
+          type: string
+          description: Type of token returned. For now, will always be Bearer.
     County:
       type: object
       required:
@@ -81,6 +111,94 @@ components:
         name:
           type: string
 paths:
+  /users/register/:
+    post:
+      summary: Registers a new user with default (minimal) permissions
+      tags: [Users]
+      parameters:
+        - in: body
+          name: firstName
+          schema:
+            type: string
+        - in: body
+          name: lastName
+          schema:
+            type: string
+        - in: body
+          name: email
+          required: true
+          schema:
+            type: string
+        - in: body
+          name: password
+          required: true
+          schema:
+            type: string
+        - in: body
+          name: phone
+          schema:
+            type: string
+      responses:
+        201:
+          description: User has been successfully registered
+        422:
+          description: Email is already registered
+  /users/login/:
+    post:
+      summary: Logs in a registered user
+      tags: [Users]
+      parameters:
+        - in: body
+          name: email
+          required: true
+          schema:
+            type: string
+        - in: body
+          name: password
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: >
+            Successfully authenticated.
+            The response contains an HTTPOnly refresh token for future auth, as well as an access token.
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: refresh_token=af234sbd; Path=/users/refresh; HttpOnly
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginTokenResponse'
+        401:
+          description: The user's password is incorrect or could not be read.
+        422:
+          description: The user's email is not registered or could not be read.
+  /users/refresh/:
+    post:
+      summary: Refreshes access with a valid refresh token.
+      tags: [Users]
+      parameters:
+        in: cookie
+        type: string
+        name: refresh_token
+        required: true
+      responses:
+        200:
+          description: The token was successfully refreshed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefreshTokenResponse'
+        400:
+          description: There was an error decoding the token.
+        401:
+          description: The token is absent, outdated, or invalid.
+
+
+
   /counties/{id}:
     get:
       summary: Gets data for an individual county by id
@@ -124,3 +242,4 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/County'
+

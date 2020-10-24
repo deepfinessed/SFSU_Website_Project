@@ -8,6 +8,7 @@ import { useMounted } from '@hooks';
 import { theme } from '@utils';
 
 import ThemeContext, { useTheme } from '@contexts/ThemeContext';
+import AuthContext from '@contexts/AuthContext';
 
 import { Toggle } from '@components/Inputs';
 import { Container } from '@components/Layouts';
@@ -51,8 +52,10 @@ const AppContent = ({ Component, pageProps }: AppProps): JSX.Element => {
 const App = (props: AppProps): JSX.Element => {
   return (
     <ThemeContext>
-      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-      <AppContent {...props} />
+      <AuthContext>
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+        <AppContent {...props} />
+      </AuthContext>
     </ThemeContext>
   );
 };
