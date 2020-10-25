@@ -1,15 +1,15 @@
 import React from 'react';
+import {Text} from "components/DataDisplay"
 import { Field, Formik } from "formik";
 import { InputField } from "../components/InputFields";
 import { Container } from '@components/Layouts';
 
 
 
-
 const CovidDataEntry= (): JSX.Element => {
   return (
     <Container align="center">
-
+      <Text variant="h1"> Covid 19 Data Entry Form</Text>
       <Formik
         onSubmit={data => {
           console.log(data);

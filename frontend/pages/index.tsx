@@ -13,7 +13,7 @@ const Home = (): JSX.Element => {
       <Link href="/Register">
         <Button variant="secondary"> Register</Button>
       </Link>
-      <Link href="/LoginPage">
+      <Link href="/Login">
         <Button variant="secondary"> Login </Button>
       </Link>
       <Link href="/DataEntry">

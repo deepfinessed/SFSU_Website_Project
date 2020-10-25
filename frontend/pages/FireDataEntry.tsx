@@ -8,8 +8,8 @@ import { Text } from '@components/DataDisplay';
 
 
 const FireDataEntry = (): JSX.Element => {
-  const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
-  const url = `${baseURL}/api/users/login`;
+  //const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+  //const url = `${baseURL}/api/users/login`;
   return (
     <Container align="center">
       <Text variant="h1"> Wild Fire Data Entry Form</Text>

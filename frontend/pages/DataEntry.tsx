@@ -1,23 +1,22 @@
 import React from 'react';
-
-
-
 import { Container } from '@components/Layouts';
-import { Link } from '@components/DataDisplay';
+import { Link, Text } from '@components/DataDisplay';
 import { Button } from '@components/Inputs';
 
 
-const Home = (): JSX.Element => {
+
+const DataEntry = (): JSX.Element => {
   return (
     <Container align="center">
+      <Text variant="h1"> Please select a form</Text>
       <Link href="/CovidDataEntry">
-        <Button variant="secondary"> Covid 19 Data Entry</Button>
+        <Button variant="secondary"> Covid 19 Data Entry Form</Button>
       </Link>
       <Link href="/FireDataEntry">
-        <Button variant="secondary"> Fire Data Entry </Button>
+        <Button variant="secondary"> WildFire Data Entry Form</Button>
       </Link>
     </Container> 
   );
 };
 
-export default Home;
+export default DataEntry;
