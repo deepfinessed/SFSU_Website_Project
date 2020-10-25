@@ -16,6 +16,10 @@ const Register = (): JSX.Element => {
       <Formik
         onSubmit={data => {
           console.log(JSON.stringify(data));
+          if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(data.email)) {
+            alert("Email is wrong format")
+            return;
+          }
           if (data.password !== data.confirm_password) {
             alert("passwords do not match");
             return;
@@ -32,7 +36,7 @@ const Register = (): JSX.Element => {
           lastName: "",
           password: "",
           confirm_password: "",
-          phonenumber: "",
+          phone: "",
           address: "",
           county: "",
           zipcode: "",
@@ -64,7 +68,6 @@ const Register = (): JSX.Element => {
                 component={InputField}
               />
             </div>
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
             <div>
               <Field
                 name="phonenumer" required
@@ -128,8 +131,6 @@ const Register = (): JSX.Element => {
       <Link href="/LoginPage">
         <Button variant="secondary"> Login</Button>
       </Link>
-
-
     </Container>
   );
 };

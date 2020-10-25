@@ -15,23 +15,63 @@ const CovidDataEntry= (): JSX.Element => {
           console.log(data);
         }}
         initialValues={{
-          countycode: "",
-          numbercases:""
+          county_id: "",
+          county: "",
+          deaths: "",
+          icu: "",
+          hosp:"",
+          cases:"",
+          date:""
         }}
       >
         {({ handleSubmit }) => (
           <form onSubmit={handleSubmit}>
             <div>
               <Field
-                name="County Code" required
-                placeholder="countycode"
+                name="county_id" required
+                placeholder="County Code"
                 component={InputField}
               />
             </div>
             <div>
               <Field
-                name="Number of new cases today" required
-                placeholder="numbercases"
+                name="county" required
+                placeholder="County name"
+                component={InputField}
+              />
+            </div>
+            <div>
+              <Field
+                name="deaths" required
+                placeholder="Number of Deaths"
+                component={InputField}
+              />
+            </div>
+            <div>
+              <Field
+                name="icu" required
+                placeholder="ICU number"
+                component={InputField}
+              />
+            </div>
+            <div>
+              <Field
+                name="hosp" required
+                placeholder="hospitals"
+                component={InputField}
+              />
+            </div>
+            <div>
+              <Field
+                name="cases" required
+                placeholder="number of cases"
+                component={InputField}
+              />
+            </div>
+            <div>
+              <Field
+                name="date" required
+                placeholder="date"
                 component={InputField}
               />
             </div>

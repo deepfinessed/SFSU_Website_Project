@@ -16,6 +16,10 @@ const Login = (): JSX.Element => {
             <Formik
                 onSubmit={data => {
                     console.log(JSON.stringify(data));
+                    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(data.email)) {
+                        alert("Email is wrong format")
+                        return;
+                    }
                     fetch(url, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -34,7 +38,6 @@ const Login = (): JSX.Element => {
                             <Field
                                 name="email"
                                 placeholder="email"
-                                pattern="/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/" required
                                 component={InputField}
                             />
                         </div>
