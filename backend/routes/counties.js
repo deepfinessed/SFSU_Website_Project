@@ -36,7 +36,7 @@ router.get('/:id/covid-display', async function(req,res,next) {
   }
   let recordType = req.query.type ? req.query.type : 'all';
   let today = new Date();
-  let past_date = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+  let past_date = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000);
   let county = await prisma.covidRecord.findMany({
     where: {
        county_id : id,
