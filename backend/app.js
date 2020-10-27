@@ -18,6 +18,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
 import countiesRouter from './routes/counties.js';
+import recordsRouter from './routes/records.js';
 
 const app = express();
 
@@ -77,6 +78,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users/', usersRouter);
 app.use('/counties', countiesRouter);
+app.use('/records/', recordsRouter);
 
 app.use(
     "/docs",
