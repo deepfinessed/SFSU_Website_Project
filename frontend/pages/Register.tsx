@@ -1,11 +1,9 @@
 import React from 'react';
-import { Field, Formik } from "formik";
-import { InputField } from "../components/InputFields";
+import { Field, Formik } from 'formik';
 import { Container } from '@components/Layouts';
 import { Link, Text } from '@components/DataDisplay';
 import { Button } from '@components/Inputs';
-
-
+import { InputField } from '../components/InputFields';
 
 const Register = (): JSX.Element => {
   const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
@@ -14,45 +12,48 @@ const Register = (): JSX.Element => {
     <Container align="center">
       <Text variant="h1">Registration</Text>
       <Formik
-        onSubmit={data => {
+        onSubmit={(data) => {
           console.log(JSON.stringify(data));
           if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(data.email)) {
-            alert("Email is wrong format")
+            alert('Email is wrong format');
             return;
           }
           if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/i.test(data.password)) {
-            alert("password must be between 6 to 20 characters which contain at least one numeric digit, one uppercase and one lowercase letter")
+            alert(
+              'password must be between 6 to 20 characters which contain at least one numeric digit, one uppercase and one lowercase letter'
+            );
             return;
           }
           if (data.password !== data.confirm_password) {
-            alert("passwords do not match");
+            alert('passwords do not match');
             return;
           }
 
           fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
           }).then((response) => console.log(response));
         }}
         initialValues={{
-          email: "",
-          firstName: "",
-          lastName: "",
-          password: "",
-          confirm_password: "",
-          phone: "",
-          address: "",
-          county: "",
-          zipcode: "",
-          city: ""
+          email: '',
+          firstName: '',
+          lastName: '',
+          password: '',
+          confirm_password: '',
+          phone: '',
+          address: '',
+          county: '',
+          zipcode: '',
+          city: '',
         }}
       >
         {({ handleSubmit }) => (
           <form onSubmit={handleSubmit}>
             <div>
               <Field
-                name="firstName" required
+                name="firstName"
+                required
                 placeholder="firstName"
                 component={InputField}
               />
@@ -60,7 +61,8 @@ const Register = (): JSX.Element => {
 
             <div>
               <Field
-                name="lastName" required
+                name="lastName"
+                required
                 placeholder="lastName"
                 component={InputField}
               />
@@ -68,19 +70,22 @@ const Register = (): JSX.Element => {
 
             <div>
               <Field
-                name="email" required
+                name="email"
+                required
                 placeholder="email"
                 component={InputField}
               />
             </div>
             <div>
               <Field
-                name="phone" required
+                name="phone"
+                required
                 placeholder="phone number"
                 component={InputField}
               />
               <Field
-                name="password" required
+                name="password"
+                required
                 placeholder="password"
                 type="password"
                 component={InputField}
@@ -88,15 +93,17 @@ const Register = (): JSX.Element => {
             </div>
             <div>
               <Field
-                name="confirm_password" required
+                name="confirm_password"
+                required
                 placeholder="confirm password"
                 type="password"
-                id='message'
+                id="message"
               />
             </div>
             <div>
               <Field
-                name="address" required
+                name="address"
+                required
                 placeholder="address"
                 component={InputField}
               />
@@ -104,7 +111,8 @@ const Register = (): JSX.Element => {
 
             <div>
               <Field
-                name="county" required
+                name="county"
+                required
                 placeholder="county"
                 component={InputField}
               />
@@ -112,7 +120,8 @@ const Register = (): JSX.Element => {
 
             <div>
               <Field
-                name="zipcode" required
+                name="zipcode"
+                required
                 placeholder="zipcode"
                 component={InputField}
               />
@@ -120,13 +129,12 @@ const Register = (): JSX.Element => {
 
             <div>
               <Field
-                name="city" required
+                name="city"
+                required
                 placeholder="city"
                 component={InputField}
               />
             </div>
-
-
 
             <button type="submit">submit</button>
           </form>

@@ -3,8 +3,6 @@ import { Container } from '@components/Layouts';
 import { Link, Text } from '@components/DataDisplay';
 import { Button } from '@components/Inputs';
 
-
-
 const DataEntry = (): JSX.Element => {
   return (
     <Container align="center">
@@ -15,7 +13,7 @@ const DataEntry = (): JSX.Element => {
       <Link href="/FireDataEntry">
         <Button variant="secondary"> WildFire Data Entry Form</Button>
       </Link>
-    </Container> 
+    </Container>
   );
 };
 

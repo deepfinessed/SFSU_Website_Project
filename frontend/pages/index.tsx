@@ -6,7 +6,6 @@ import { Container } from '@components/Layouts';
 import { Link, Text } from '@components/DataDisplay';
 import { Button } from '@components/Inputs';
 
-
 const Home = (): JSX.Element => {
   return (
     <Container align="center">
@@ -33,7 +32,7 @@ const Home = (): JSX.Element => {
       <Link href="/vphome">
         <Button variant="secondary">Home for vp</Button>
       </Link>
-    </Container> 
+    </Container>
   );
 };
 
