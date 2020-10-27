@@ -5,7 +5,6 @@ import { Container } from '@components/Layouts';
 import { Text } from '@components/DataDisplay';
 import Covid from '../../../types/Covid';
 import { Chart } from 'chart.js';
-import { abort } from 'process';
 
 const CountyPage = (): JSX.Element => {
   const firePerimGeoJSON =
@@ -20,11 +19,10 @@ const CountyPage = (): JSX.Element => {
 
   useEffect(() => {
     console.log(router);
-    if(router.query.id === undefined && !initialized) {
-      router.push('/vphome'); 
-      abort(); 
-      return; 
-    } 
+    // if(router.query.id === undefined && !initialized) {
+    //   router.push('/vphome');  
+    //   return; 
+    // } 
     async function getCountyCovid() {
     
       const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
