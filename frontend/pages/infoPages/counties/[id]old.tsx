@@ -3,8 +3,6 @@ import { useRouter } from 'next/router';
 
 import { Container } from '@components/Layouts';
 import { Text } from '@components/DataDisplay';
-import Covid from '../../../types/Covid';
-import { Chart } from 'chart.js';
 
 const CountyPage = (): JSX.Element => {
   const firePerimGeoJSON =
@@ -15,23 +13,8 @@ const CountyPage = (): JSX.Element => {
   const [LongLat, setLongLat] = useState(currCoords);
   const [countyName, setCountyName] = useState('');
   const countyId = router.query.id;
-  const [countyCovidResponse, setCountyCovidResponse] = useState <Array<Covid>> ([]);
 
   useEffect(() => {
-
-    async function getCountyCovid() {
-      const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
-        // const query = {
-        //   id: 32
-        // };
-        const url = `${baseURL}/api/counties/${countyId}/covid-display`;
-        await fetch(url)
-          .then((response) => {
-            console.log(response); 
-            return response.json()})
-          .then((data) => setCountyCovidResponse(data));
-    }
-
     async function loadMap() {
       if (initialized) {
         return;
@@ -79,81 +62,8 @@ const CountyPage = (): JSX.Element => {
       mymap.fitBounds(CalBounds);
       mymap.setView(temp, 10);
     }
-    async function loadChart (){
-      await getCountyCovid(); 
-      console.log(countyCovidResponse); 
-      let dateLabels : string[] = []; 
-      let deaths : number[] = []; 
-      let icu : number[]= [];
-      let cases : number[]= []; 
-      let hosp : number[]= []; 
-      countyCovidResponse.map((val)=>{  
-        dateLabels.push(val.date!); 
-        deaths.push(val.deaths!); 
-        icu.push(val.icu!); 
-        cases.push(val.cases!);
-        hosp.push(val.hosp!); 
 
-      })
-      const canvas : any = document.getElementById('myChart');
-
-      const ctx = canvas.getContext("2d")
-      new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: dateLabels,
-          datasets: [
-            {
-              label: 'Deaths',
-              backgroundColor: 'blue',
-              data: deaths,
-            },
-            {
-              label: 'Cases',
-              backgroundColor: 'red',
-              data: cases,
-            },
-            {
-              label: 'Icu',
-              backgroundColor: 'green',
-              data: icu,
-            },
-            {
-              label: 'hospitalization', 
-              backgroundColor: 'purple', 
-              data: hosp
-            }
-          ],
-        },
-        options: {
-          responsive: false,
-          legend: { display: true },
-          title: {
-            display: true,
-            text: 'Covid last 90 days',
-          },
-          scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true
-                }
-            }]
-          }
-        },
-      });
-    }
-    if (router.query.type === "Covid") {
-      loadChart(); 
-      document.getElementById("mapid").style.display = "none"; 
-    } else if (router.query.type === "Fire") {
-      loadMap();
-      document.getElementById("myChart").style.display = "none"; 
-    } else {
-      loadChart();
-      loadMap(); 
-      
-    }
-    
+    loadMap();
 
     setInit(true);
   }, [initialized, LongLat, countyId]);
@@ -175,10 +85,8 @@ const CountyPage = (): JSX.Element => {
         {router.query.county || 'Not Specified'}
         <br />
         {LongLat}
-        <canvas id="myChart" width="400" height="400" />
       </Container>
       <div id="mapid" style={{ height: '500px' }} />
-      
     </div>
   );
 };

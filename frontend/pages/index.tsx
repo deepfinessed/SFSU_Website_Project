@@ -12,8 +12,11 @@ const Home = (): JSX.Element => {
       <Link href="/Register">
         <Button variant="secondary"> Register</Button>
       </Link>
-      <Link href="/LoginPage">
-        <Button variant="secondary"> Login</Button>
+      <Link href="/Login">
+        <Button variant="secondary"> Login </Button>
+      </Link>
+      <Link href="/DataEntry">
+        <Button variant="secondary"> Data Entry</Button>
       </Link>
       <Text variant="h1">CSC648 - Team 6</Text>
       <Text variant="h4">
@@ -28,12 +31,6 @@ const Home = (): JSX.Element => {
       </Link>
       <Link href="/vphome">
         <Button variant="secondary">Home for vp</Button>
-      </Link>
-      <Link href="/test">
-        <Button variant="secondary">test</Button>
-      </Link>
-      <Link href="/CovidDisplay">
-        <Button variant="secondary">Covid Display</Button>
       </Link>
     </Container>
   );

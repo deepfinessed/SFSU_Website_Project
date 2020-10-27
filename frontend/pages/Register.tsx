@@ -9,37 +9,38 @@ import { Button } from '@components/Inputs';
 
 const Register = (): JSX.Element => {
   const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
-  const url = `${baseURL}/api/users/register/`; 
+  const url = `${baseURL}/api/users/register`;
   return (
     <Container align="center">
       <Text variant="h1">Registration</Text>
       <Formik
         onSubmit={data => {
           console.log(JSON.stringify(data));
-          if (data.password !== data.confirm_password){
-            alert("passwords do not match"); 
-            return; 
-
+          if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(data.email)) {
+            alert("Email is wrong format")
+            return;
+          }
+          if (data.password !== data.confirm_password) {
+            alert("passwords do not match");
+            return;
           }
           fetch(url, {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
-        }).then((response) => console.log(response));
-      }
-    }
-        
+          }).then((response) => console.log(response));
+        }}
         initialValues={{
-          email: '',
-          firstName: '',
-          lastName: '',
-          password: '',
-          confirm_password: '',
-          phone: '',
-          // address: '',
-          // county: '',
-          // zipcode: '',
-          // city: '',
+          email: "",
+          firstName: "",
+          lastName: "",
+          password: "",
+          confirm_password: "",
+          phone: "",
+          address: "",
+          county: "",
+          zipcode: "",
+          city: ""
         }}
       >
         {({ handleSubmit }) => (
@@ -69,12 +70,11 @@ const Register = (): JSX.Element => {
                 component={InputField}
               />
             </div>
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js" />
             <div>
-              <Field 
-              name="phone" required
-              placeholder="phone number"
-              component={InputField}
+              <Field
+                name="phonenumer" required
+                placeholder="phone number"
+                component={InputField}
               />
               <Field
                 name="password"
@@ -85,13 +85,12 @@ const Register = (): JSX.Element => {
               />
             </div>
             <div>
-            <Field
-              name="confirm_password"
-              required
-              placeholder="confirm password"
-              type="password"
-              id="message"
-            />
+              <Field
+                name="confirm_password" required
+                placeholder="confirm password"
+                type="password"
+                id='message'
+              />
             </div>
             {/* <div>
               <Field
@@ -137,8 +136,6 @@ const Register = (): JSX.Element => {
       <Link href="/LoginPage">
         <Button variant="secondary"> Login</Button>
       </Link>
-
-
     </Container>
   );
 };

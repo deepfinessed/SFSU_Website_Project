@@ -14,7 +14,7 @@ import { Button } from '@components/Inputs';
 import County from '../types/County';
 
 const VPHome = (): JSX.Element => {
-  const [infoType, setInfoType] = useState('all');
+  const [infoType, setInfoType] = useState('All');
   const [county, setCounty] = useState('');
   const [countyList, setCountyList] = useState<Array<County>>([]);
 
@@ -123,9 +123,10 @@ const VPHome = (): JSX.Element => {
         id="infoType"
         onChange={(event) => setInfoType(event.target.value)}
       >
+        <option value="All">All</option>
         <option value="Covid">Corona Virus</option>
         <option value="Fire">Fires</option>
-        <option value="All">All</option>
+        
       </select>
       <div>Leave blank for list of all counties.</div>
       <Button variant="secondary" onClick={() => getCounties()}>

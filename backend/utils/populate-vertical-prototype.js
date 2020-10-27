@@ -4,8 +4,8 @@ const {PrismaClient} = Prisma
 const prisma = new PrismaClient();
 
 // Generates random values between these dates:
-const startDate = new Date(2010,0,1);
-const endDate = new Date(2020,0,1);
+const startDate = new Date(2020,0,1);
+const endDate = new Date();
 const minAqi = 50;
 const maxAqi = 250;
 const evacLevel = 2;
