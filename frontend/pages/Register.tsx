@@ -75,7 +75,7 @@ const Register = (): JSX.Element => {
             </div>
             <div>
               <Field
-                name="phonenumer" required
+                name="phone" required
                 placeholder="phone number"
                 component={InputField}
               />
