@@ -11,7 +11,8 @@
     "build": "next build",
     "start": "next start",
     "aws-demo-start": "next start -p 80",
-    "lint": "eslint . --ext .ts,.tsx"
+    "lint": "eslint . --ext .ts,.tsx",
+    "lint-fix": "eslint . --ext .ts,tsx --fix"
   },
   "husky": {
     "hooks": {
