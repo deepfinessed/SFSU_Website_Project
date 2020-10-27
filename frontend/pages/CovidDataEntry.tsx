@@ -1,27 +1,35 @@
 import React from 'react';
-import {Text} from "components/DataDisplay"
+import { Text } from "components/DataDisplay"
 import { Field, Formik } from "formik";
 import { InputField } from "../components/InputFields";
 import { Container } from '@components/Layouts';
 
 
 
-const CovidDataEntry= (): JSX.Element => {
+const CovidDataEntry = (): JSX.Element => {
+  const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+  const url = `${baseURL}/api/..`;
   return (
     <Container align="center">
       <Text variant="h1"> Covid 19 Data Entry Form</Text>
       <Formik
         onSubmit={data => {
-          console.log(data);
+          console.log(JSON.stringify(data));
+          fetch(url, {
+            method: 'POST',
+            headers: { 'Content-type': 'application/json' },
+            body: JSON.stringify(data)
+          }).then((response) => console.log(response));
         }}
+
         initialValues={{
           county_id: "",
           county: "",
           deaths: "",
           icu: "",
-          hosp:"",
-          cases:"",
-          date:""
+          hosp: "",
+          cases: "",
+          date: ""
         }}
       >
         {({ handleSubmit }) => (
@@ -75,7 +83,7 @@ const CovidDataEntry= (): JSX.Element => {
                 component={InputField}
               />
             </div>
-           
+
 
 
             <button type="submit">submit</button>

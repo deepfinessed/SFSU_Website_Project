@@ -20,10 +20,15 @@ const Register = (): JSX.Element => {
             alert("Email is wrong format")
             return;
           }
+          if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/i.test(data.password)) {
+            alert("password must be between 6 to 20 characters which contain at least one numeric digit, one uppercase and one lowercase letter")
+            return;
+          }
           if (data.password !== data.confirm_password) {
             alert("passwords do not match");
             return;
           }
+
           fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -128,7 +133,7 @@ const Register = (): JSX.Element => {
         )}
       </Formik>
       <Text variant="h6">Already Registered?</Text>
-      <Link href="/LoginPage">
+      <Link href="/Login">
         <Button variant="secondary"> Login</Button>
       </Link>
     </Container>
