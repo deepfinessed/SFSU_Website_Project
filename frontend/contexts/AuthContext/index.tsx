@@ -64,7 +64,6 @@ export default ({ children }: { children: ReactNode }): JSX.Element => {
     [accessToken, setAccessToken]
   );
 
-  console.log(`In AuthContext with token as ${token.accessToken}.`);
   return <AuthContext.Provider value={token}>{children}</AuthContext.Provider>;
 };
 
