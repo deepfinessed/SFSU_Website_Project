@@ -19,25 +19,27 @@ const CountyPage = (): JSX.Element => {
 
   useEffect(() => {
     console.log(router);
-    // if(router.query.id === undefined && !initialized) {
-    //   router.push('/vphome');  
-    //   return; 
-    // } 
-    async function getCountyCovid() {
+    if(router.query.id === undefined) {
+      return; 
+    }  else {
+      setInit(true);
+    }
+    async function getCountyCovid() : Promise<Covid[]> {
     
       const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
         
         const url = `${baseURL}/api/counties/${countyId}/covid-display`;
-        await fetch(url)
-          .then((response) => {
-            console.log(response); 
-            return response.json()})
-          .then((data) => {setCountyCovidResponse(data)});
+        const data = await fetch(url)
+          .then((response) =>  
+            response.json())
+          .then((data) => { return(data); 
+            setCountyCovidResponse(data)});
+            return data; 
     }
 
     async function loadMap() {
       if (initialized) {
-        return;
+        return; 
       }
       const leaflet = await import('leaflet');
       const L = leaflet;
@@ -84,14 +86,14 @@ const CountyPage = (): JSX.Element => {
     }
     async function loadChart (){
       
-      await getCountyCovid().then(() => {
+      await getCountyCovid().then((data) => {
       
         let dateLabels : string[] = []; 
         let deaths : number[] = []; 
         let icu : number[]= [];
         let cases : number[]= []; 
         let hosp : number[]= []; 
-        countyCovidResponse.map((val)=>{  
+        data.map((val)=>{  
           dateLabels.push(val.date!); 
           deaths.push(val.deaths!); 
           icu.push(val.icu!); 
@@ -158,7 +160,7 @@ const CountyPage = (): JSX.Element => {
         loadChart(); 
         loadMap(); 
     }
-    setInit(true);
+    
   }, [initialized, LongLat, countyId]);
 
   return (
