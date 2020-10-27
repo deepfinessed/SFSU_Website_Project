@@ -3,6 +3,8 @@ tags:
     description: Provides county level data
   - name: Users
     description: Provides functionality for registering and authenticating users
+  - name: Input
+    description: Allows employees to input data
 components:
   schemas:
     LoginTokenResponse:
@@ -110,6 +112,50 @@ components:
           type: boolean
         name:
           type: string
+    CovidRecordInput:
+      type: object
+      properties:
+        countyName:
+          type: string
+        cases:
+          type: integer
+          description: Number of COVID cases
+        deaths:
+          type: integer
+          description: Number of COVID deaths
+        icu:
+          type: integer
+          description: Number of ICU cases
+        hosp:
+          type: integer
+          description: Number of hospitalizations
+        date:
+          type: string
+          format: date-time
+          description: Date of record
+    FireRecordInput:
+      type: object
+      properties:
+        countyName:
+          type: string
+        start_date:
+          type: string
+          format: date-time
+        end_date:
+          type: string
+          format: date-time
+        aqi:
+          type: integer
+          description: Air Quality Index
+        EvacuationLevel:
+          type: integer
+        area:
+          type: number
+          description: Area of fire in square miles
+        active:
+          type: boolean
+        name:
+          type: string
 paths:
   /users/register/:
     post:
@@ -196,8 +242,46 @@ paths:
           description: There was an error decoding the token.
         401:
           description: The token is absent, outdated, or invalid.
-
-
+  /users/employee/register/:
+    post:
+      summary: Registers a new employee with employee permissions. Requires admin level access.
+      tags: [Users]
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            pattern: '^Bearer [A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$'
+            example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlbXBsb3llZUBlbXBsb3kuY29tIiwiYWNjZXNzIjoiZW1wbG95ZWUiLCJpYXQiOjE2MDM4MzQ4MDMsImV4cCI6MTYwMzgzODQwM30.jrsnyIwJmOM_JOFoAVi4XncSnl-loGysJ2X7Zj8ewX0.'
+        - in: body
+          name: firstName
+          schema:
+            type: string
+        - in: body
+          name: lastName
+          schema:
+            type: string
+        - in: body
+          name: email
+          required: true
+          schema:
+            type: string
+        - in: body
+          name: password
+          required: true
+          schema:
+            type: string
+        - in: body
+          name: phone
+          schema:
+            type: string
+      responses:
+        201:
+          description: User has been successfully registered
+        403:
+          description: Caller does not have admin level access
+        422:
+          description: Email is already registered
 
   /counties/{id}:
     get:
@@ -242,4 +326,55 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/County'
+  /records/covid/:
+    post:
+      summary: Posts a COVID Record
+      tags: [Input]
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+          type: string
+          pattern: '^Bearer [A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$'
+          example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlbXBsb3llZUBlbXBsb3kuY29tIiwiYWNjZXNzIjoiZW1wbG95ZWUiLCJpYXQiOjE2MDM4MzQ4MDMsImV4cCI6MTYwMzgzODQwM30.jrsnyIwJmOM_JOFoAVi4XncSnl-loGysJ2X7Zj8ewX0.'
+        - in: body
+          name: Record
+          description: The record to be created
+          schema:
+            $ref: '#/components/schemas/COVIDRecordInput'
+      responses:
+        "201":
+          description: The record was created successfully.
+        "403":
+          description: The caller does not have write (employee) level permissions
+        "422":
+          description: There was an error parsing the record contents and it could not be created
+        "401":
+          description: The Authorization header was missing or invalid
+  /records/fire/:
+    post:
+      summary: Posts a Fire Record
+      tags: [Input]
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+          type: string
+          pattern: '^Bearer [A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$'
+          example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlbXBsb3llZUBlbXBsb3kuY29tIiwiYWNjZXNzIjoiZW1wbG95ZWUiLCJpYXQiOjE2MDM4MzQ4MDMsImV4cCI6MTYwMzgzODQwM30.jrsnyIwJmOM_JOFoAVi4XncSnl-loGysJ2X7Zj8ewX0.'
+        - in: body
+          name: Record
+          description: The record to be created
+          schema:
+            $ref: '#/components/schemas/FireRecordInput'
+      responses:
+        "201":
+          description: The record was created successfully.
+        "403":
+          description: The caller does not have write (employee) level permissions
+        "422":
+          description: There was an error parsing the record contents and it could not be created
+        "401":
+          description: The Authorization header was missing or invalid
+
 
