@@ -11,11 +11,8 @@ const CountyPage = (): JSX.Element => {
     'https://opendata.arcgis.com/datasets/5da472c6d27b4b67970acc7b5044c862_0.geojson';
   const router = useRouter();
   const [initialized, setInit] = useState(false);
-  const currCoords: [number, number, number] = [0, 0, 0];
-  const [LongLat, setLongLat] = useState(currCoords);
   const [countyName, setCountyName] = useState('');
   const countyId = router.query.id;
-  const [countyCovidResponse, setCountyCovidResponse] = useState <Array<Covid>> ([]);
 
   useEffect(() => {
     console.log(router);
@@ -29,11 +26,10 @@ const CountyPage = (): JSX.Element => {
       const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
         
         const url = `${baseURL}/api/counties/${countyId}/covid-display`;
-        const data = await fetch(url)
+        const data = fetch(url)
           .then((response) =>  
             response.json())
-          .then((data) => { return(data); 
-            setCountyCovidResponse(data)});
+          .then((data) => { return(data);});
             return data; 
     }
 
@@ -46,33 +42,42 @@ const CountyPage = (): JSX.Element => {
       const url = process.env.NEXT_PUBLIC_BASE_URL;
 
       const currLongLat: [number, number, number] = [0, 0, 0];
-      const fetchUrl = `${url}/api/counties/${countyId}`;
+      const countyDataUrl = `${url}/api/counties/${countyId}`;
 
       const mymap = L.map('mapid').setView(L.latLng(currLongLat), 8);
 
-      await fetch(fetchUrl)
-        .then((response) => response.json())
-        .then((data) => {
-          currLongLat[0] = data.latitude;
-          currLongLat[1] = data.longitude;
-          setLongLat([data.longitude, data.latitude, 0]);
-          setCountyName(data.name);
-        });
+      const responses = await Promise.all([
+        fetch(countyDataUrl),
+        fetch(firePerimGeoJSON),
+      ]);
+      
 
-      await fetch(firePerimGeoJSON)
-        .then((response) => response.json())
-        .then((data) => {
-          const myLayer = L.geoJSON().addTo(mymap);
-          myLayer.addData(data);
-        });
+      const data = await Promise.all(
+          responses.map((response) => response.json())
+      );
 
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        minZoom: 5,
-        maxZoom: 18,
-        id: 'OSM',
-        tileSize: 512,
-        zoomOffset: -1,
-      }).addTo(mymap);
+      const [countyData, firePerimData] = data;
+
+      currLongLat[0] = countyData.latitude;
+      currLongLat[1] = countyData.longitude;
+      setCountyName(countyData.name);
+
+      const myLayer = L.geoJSON().addTo(mymap);
+      myLayer.addData(firePerimData);
+
+      L.tileLayer(
+          'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+          {
+            minZoom: 5,
+            maxZoom: 18,
+            id: 'OSM',
+            tileSize: 512,
+            zoomOffset: -1,
+          }
+        )
+        .addTo(mymap);
+
+
       const temp = L.latLng(currLongLat);
       mymap.setView(temp, 12);
       const CalBounds = L.latLngBounds(
@@ -84,6 +89,7 @@ const CountyPage = (): JSX.Element => {
       mymap.fitBounds(CalBounds);
       mymap.setView(temp, 10);
     }
+
     async function loadChart (){
       
       await getCountyCovid().then((data) => {
@@ -161,7 +167,7 @@ const CountyPage = (): JSX.Element => {
         loadMap(); 
     }
     
-  }, [initialized, LongLat, countyId]);
+  }, [initialized, countyId]);
 
   return (
     <div>
@@ -179,7 +185,6 @@ const CountyPage = (): JSX.Element => {
         County:
         {router.query.county || 'Not Specified'}
         <br />
-        {LongLat}
         <canvas id="myChart" width="1000" height="1000" style={{ height: '800px',width: '800px' }}/>
       </Container>
       <div id="mapid" style={{ height: '500px' }} />
