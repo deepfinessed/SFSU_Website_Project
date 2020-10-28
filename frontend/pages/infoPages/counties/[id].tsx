@@ -13,6 +13,8 @@ const CountyPage = (): JSX.Element => {
   const [initialized, setInit] = useState(false);
   const [countyName, setCountyName] = useState('');
   const countyId = router.query.id;
+  const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+  const countyDataUrl = `${baseURL}/api/counties/${countyId}`;
 
   useEffect(() => {
     console.log(router);
@@ -21,17 +23,6 @@ const CountyPage = (): JSX.Element => {
     }  else {
       setInit(true);
     }
-    async function getCountyCovid() : Promise<Covid[]> {
-    
-      const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
-        
-        const url = `${baseURL}/api/counties/${countyId}/covid-display`;
-        const data = fetch(url)
-          .then((response) =>  
-            response.json())
-          .then((data) => { return(data);});
-            return data; 
-    }
 
     async function loadMap() {
       if (initialized) {
@@ -39,10 +30,9 @@ const CountyPage = (): JSX.Element => {
       }
       const leaflet = await import('leaflet');
       const L = leaflet;
-      const url = process.env.NEXT_PUBLIC_BASE_URL;
 
       const currLongLat: [number, number, number] = [0, 0, 0];
-      const countyDataUrl = `${url}/api/counties/${countyId}`;
+     
 
       const mymap = L.map('mapid').setView(L.latLng(currLongLat), 8);
 
@@ -92,13 +82,20 @@ const CountyPage = (): JSX.Element => {
 
     async function loadChart (){
       
-      await getCountyCovid().then((data) => {
+      const response = await fetch(countyDataUrl);
+      const countyData = await response.json(); 
+      setCountyName(countyData.name);
+
+      const fetchedResponse = await fetch(`${baseURL}/api/counties/${countyId}/covid-display`);
+      const dataPromise : Promise<Covid[]>  = await (fetchedResponse.json()); 
+      const data = await dataPromise; 
       
         let dateLabels : string[] = []; 
         let deaths : number[] = []; 
         let icu : number[]= [];
         let cases : number[]= []; 
         let hosp : number[]= []; 
+        
         data.map((val)=>{  
           dateLabels.push(val.date!); 
           deaths.push(val.deaths!); 
@@ -153,7 +150,6 @@ const CountyPage = (): JSX.Element => {
             }
           },
         });
-      }) 
       
     }
     if (router.query.type === "Covid") {
@@ -182,8 +178,6 @@ const CountyPage = (): JSX.Element => {
           Data for
           {' ' + countyName}
         </Text>
-        County:
-        {router.query.county || 'Not Specified'}
         <br />
         <canvas id="myChart" width="1000" height="1000" style={{ height: '800px',width: '800px' }}/>
       </Container>
