@@ -4,7 +4,6 @@ import { Container } from '@components/Layouts';
 import { InputField } from '@components/InputFields';  
 import { Text } from '@components/DataDisplay';
 import { useAuth } from '@contexts/AuthContext';
-import { InputField } from '../components/InputFields';
 
 const Login = (): JSX.Element => {
   const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
@@ -54,18 +53,6 @@ const Login = (): JSX.Element => {
               />
             </div>
 
-<<<<<<< HEAD
-                        <div>
-                            <Field
-                                name="password" required
-                                placeholder="password"
-                                type="password"
-                                component={InputField}
-                            />
-                        </div>
-
-=======
->>>>>>> origin/development
             <button type="submit">submit</button>
           </form>
         )}

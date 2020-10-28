@@ -4,7 +4,6 @@ import { Container } from '@components/Layouts';
 import { InputField } from '../components/InputFields';
 import { Link, Text } from '@components/DataDisplay';
 import { Button } from '@components/Inputs';
-import { InputField } from '../components/InputFields';
 
 const Register = (): JSX.Element => {
   const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
@@ -101,7 +100,7 @@ const Register = (): JSX.Element => {
                 id="message"
               />
             </div>
-            {/* <div>
+            <div>
               <Field
                 name="address"
                 required
@@ -135,11 +134,7 @@ const Register = (): JSX.Element => {
                 placeholder="city"
                 component={InputField}
               />
-<<<<<<< HEAD
-            </div> */}
-=======
             </div>
->>>>>>> origin/development
 
             <button type="submit">submit</button>
           </form>
