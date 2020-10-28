@@ -4,8 +4,7 @@ import { Container } from '@components/Layouts';
 import { InputField } from '../components/InputFields';
 import { Link, Text } from '@components/DataDisplay';
 import { Button } from '@components/Inputs';
-
-
+import { InputField } from '../components/InputFields';
 
 const Register = (): JSX.Element => {
   const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
@@ -14,33 +13,40 @@ const Register = (): JSX.Element => {
     <Container align="center">
       <Text variant="h1">Registration</Text>
       <Formik
-        onSubmit={data => {
+        onSubmit={(data) => {
           console.log(JSON.stringify(data));
           if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(data.email)) {
-            alert("Email is wrong format")
+            alert('Email is wrong format');
+            return;
+          }
+          if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/i.test(data.password)) {
+            alert(
+              'password must be between 6 to 20 characters which contain at least one numeric digit, one uppercase and one lowercase letter'
+            );
             return;
           }
           if (data.password !== data.confirm_password) {
-            alert("passwords do not match");
+            alert('passwords do not match');
             return;
           }
+
           fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
           }).then((response) => console.log(response));
         }}
         initialValues={{
-          email: "",
-          firstName: "",
-          lastName: "",
-          password: "",
-          confirm_password: "",
-          phone: "",
-          address: "",
-          county: "",
-          zipcode: "",
-          city: ""
+          email: '',
+          firstName: '',
+          lastName: '',
+          password: '',
+          confirm_password: '',
+          phone: '',
+          address: '',
+          county: '',
+          zipcode: '',
+          city: '',
         }}
       >
         {({ handleSubmit }) => (
@@ -65,14 +71,16 @@ const Register = (): JSX.Element => {
 
             <div>
               <Field
-                name="email" required
+                name="email"
+                required
                 placeholder="email"
                 component={InputField}
               />
             </div>
             <div>
               <Field
-                name="phonenumer" required
+                name="phone"
+                required
                 placeholder="phone number"
                 component={InputField}
               />
@@ -86,10 +94,11 @@ const Register = (): JSX.Element => {
             </div>
             <div>
               <Field
-                name="confirm_password" required
+                name="confirm_password"
+                required
                 placeholder="confirm password"
                 type="password"
-                id='message'
+                id="message"
               />
             </div>
             {/* <div>
@@ -126,14 +135,18 @@ const Register = (): JSX.Element => {
                 placeholder="city"
                 component={InputField}
               />
+<<<<<<< HEAD
             </div> */}
+=======
+            </div>
+>>>>>>> origin/development
 
             <button type="submit">submit</button>
           </form>
         )}
       </Formik>
       <Text variant="h6">Already Registered?</Text>
-      <Link href="/LoginPage">
+      <Link href="/Login">
         <Button variant="secondary"> Login</Button>
       </Link>
     </Container>

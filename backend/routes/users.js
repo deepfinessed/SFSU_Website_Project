@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 
 import makeAccessJWT from "../utils/makeAccessJWT.js";
 import makeRefreshToken from "../utils/makeRefreshToken.js"
+import verifyJWT from "../utils/verifyJWT.js";
 
 const router = express.Router();
 
@@ -17,7 +18,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/register/', async function (req,res,next) {
-  console.log("Recieved request:");
+  console.log("Received request:");
   console.log(req.body);
   const {firstName, lastName, email, password, phone} = req.body;
   console.log("Email parsed as:");
@@ -72,6 +73,7 @@ router.post('/login/', async function(req, res, next) {
     if(err || !result){
       console.log(err ? err : result);
       res.sendStatus(401);
+      return;
     }
     const accessToken = makeAccessJWT(user);
     const refreshToken = makeRefreshToken(user);
@@ -95,6 +97,7 @@ router.post('/refresh/', async function(req, res, next) {
   console.log(token);
   if(token === undefined){
     res.sendStatus(401);
+    return;
   }
   jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
     if(err){
@@ -117,6 +120,51 @@ router.post('/refresh/', async function(req, res, next) {
     }
     return res.json(payload);
   });
+});
+
+router.post('/employee/register/', verifyJWT, async function (req, res, next) {
+  if(req.token?.access !== 'admin') {
+    res.sendStatus(403);
+    return;
+  }
+  console.log("Received request:");
+  console.log(req.body);
+  const {firstName, lastName, email, password, phone} = req.body;
+  console.log("Email parsed as:");
+  console.log(email);
+  const oldUser = await prisma.user.findOne({
+    where: {
+      email: email,
+    }
+  });
+  if(oldUser){
+    res.status(422).send('That email is already registered');
+  }
+
+  const saltRounds = 12;
+
+  let newUser;
+  try {
+    bcrypt.hash(password, saltRounds, async (err, hash) => {
+      newUser = await prisma.user.create({
+        data: {
+          email: email,
+          firstName: firstName,
+          lastName: lastName,
+          passwordHash: hash,
+          phone: phone,
+          access: 'employee',
+        },
+      });
+      if(!newUser) {
+        res.sendStatus(422);
+      }
+    });
+  } catch(err){
+    res.sendStatus(422);
+    return;
+  }
+  res.sendStatus(201);
 });
 
 export default router;

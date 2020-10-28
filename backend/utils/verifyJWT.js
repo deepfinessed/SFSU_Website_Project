@@ -1,7 +1,11 @@
 import jwt from 'jsonwebtoken';
 
 function verifyJWT(req,res,next){
-  const token = (req.method === 'POST') ? req.body.token : req.query.token;
+  const [type, token] = req.get('Authorization').split(' ');
+  if(type !== 'Bearer'){
+    res.sendStatus(400);
+    return;
+  }
   jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
     if(err || !decodedToken){
       res.status(400).send(err);

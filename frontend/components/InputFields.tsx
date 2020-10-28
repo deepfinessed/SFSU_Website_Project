@@ -1,5 +1,5 @@
-import { FieldProps } from "formik";
-import React, { DetailedHTMLProps, InputHTMLAttributes } from "react";
+import { FieldProps } from 'formik';
+import React, { DetailedHTMLProps, InputHTMLAttributes } from 'react';
 
 type InputProps = DetailedHTMLProps<
   InputHTMLAttributes<HTMLInputElement>,

@@ -1,23 +1,27 @@
+import { useRouter } from 'next/router';
 import { useAuth } from '@contexts/AuthContext';
 
-export default async (
-  url: string,
-  options?: RequestInit
-): Promise<Response> => {
+export default () => {
   const [token] = useAuth();
+  const router = useRouter();
+  const authFetch = async (
+    url: string,
+    options?: RequestInit
+  ): Promise<Response> => {
+    if (token === undefined) {
+      // there is no auth - we probably want to redirect to login
+      router.push('/Login');
+    }
 
-  if (token === undefined) {
-    // there is no auth - we probably want to redirect to login
-    throw new Error('There is no access token');
-  }
-
-  const fetchOptions: RequestInit = {
-    ...options,
+    const fetchOptions: RequestInit = {
+      ...options,
+    };
+    fetchOptions.headers = {
+      ...options?.headers,
+      Authorization: `Bearer ${token}`,
+    };
+    // In future, we may catch error on invalid auth and redirect to login
+    return fetch(url, fetchOptions);
   };
-  fetchOptions.headers = {
-    ...options?.headers,
-    Authorization: `Bearer ${token}`,
-  };
-  // In future, we may catch error on invalid auth and redirect to login
-  return fetch(url, fetchOptions);
+  return authFetch;
 };
