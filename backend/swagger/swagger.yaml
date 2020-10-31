@@ -341,7 +341,7 @@ paths:
           name: Record
           description: The record to be created
           schema:
-            $ref: '#/components/schemas/COVIDRecordInput'
+            $ref: '#/components/schemas/CovidRecordInput'
       responses:
         "201":
           description: The record was created successfully.
