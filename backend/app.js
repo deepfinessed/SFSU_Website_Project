@@ -10,6 +10,7 @@ import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import AWS from 'aws-sdk';
 
 dotenv.config();
 
@@ -21,6 +22,12 @@ import countiesRouter from './routes/counties.js';
 import recordsRouter from './routes/records.js';
 
 const app = express();
+
+AWS.config.update({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: 'us-west-1'
+});
 
 const swaggerOptions = {
   definition: {
