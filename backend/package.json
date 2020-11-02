@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www.js",
+    "start": "node -r dotenv/config ./bin/www.js",
     "test": "mocha --reporter spec --exit",
     "make-db": "node ./utils/make-db.js",
     "vertical-prototype-db": "node ./utils/populate-vertical-prototype.js",

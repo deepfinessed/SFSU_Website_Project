@@ -1,4 +1,4 @@
-import transporter from "./transporter";
+import transporter from "./transporter.js";
 
 export default function testSESEmail() {
   const message = {
@@ -19,4 +19,4 @@ export default function testSESEmail() {
 
 testSESEmail();
 
-setTimeout(() => process.exit(0), 2000);
+setTimeout(() => process.exit(0), 5000);
