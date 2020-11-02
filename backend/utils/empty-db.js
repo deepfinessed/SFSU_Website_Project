@@ -3,6 +3,10 @@ import Prisma from '@prisma/client';
 const {PrismaClient} = Prisma
 const prisma = new PrismaClient();
 
+console.log("Deleting users...")
+const users = await prisma.user.deleteMany({});
+console.log(`Deleted ${users.count} records`);
+
 console.log("Deleting COVID/Fire Records...");
 
 console.log("Deleting Fire Records...");
