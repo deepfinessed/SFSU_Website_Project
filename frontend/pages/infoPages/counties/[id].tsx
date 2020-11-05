@@ -12,6 +12,20 @@ const CountyPage = (): JSX.Element => {
   const router = useRouter();
   const [initialized, setInit] = useState(false);
   const [countyName, setCountyName] = useState('');
+  // const [startDate, setStartDate] = useState(new Date(Date.now() - 360 * 24 * 60 * 60 * 1000)); 
+  // const [endDate, setEndDate] = useState(new Date(Date.now() - 90 * 24 * 60 * 60 * 1000)); 
+  // const [hospOn, setHospOn] = useState(1); 
+  // const [casesOn, setCasesOn] = useState(1); 
+  // const [deathsOn, setDeathsOn] = useState(1); 
+  // const [icuOn, seticeOn] = useState(1); 
+  const [startDate] = useState(new Date(Date.now() - 360 * 24 * 60 * 60 * 1000)); 
+  const [endDate] = useState(new Date(Date.now() - 90 * 24 * 60 * 60 * 1000)); 
+  const [hospOn] = useState(true); 
+  const [casesOn] = useState(true); 
+  const [deathsOn] = useState(false); 
+  const [sortBy] = useState("date"); 
+  const [orderBy] = useState("asc"); 
+  const [icuOn] = useState(true); 
   const countyId = router.query.id;
   const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
   const countyDataUrl = `${baseURL}/api/counties/${countyId}`;
@@ -82,11 +96,33 @@ const CountyPage = (): JSX.Element => {
 
     async function loadChart (){
       
-      const response = await fetch(countyDataUrl);
-      const countyData = await response.json(); 
-      setCountyName(countyData.name);
+      let requestData = 
+      {
+        countyId : countyId,
+        startDate : startDate, 
+        endDate : endDate, 
+        casesOn : casesOn,
+        icuOn : icuOn, 
+        hospOn : hospOn, 
+        deathsOn : deathsOn, 
+        sortBy : sortBy,
+        orderBy : orderBy
+      }
+      console.log(requestData.orderBy); 
+      // const response = await fetch (countyDataUrl);
+      // //const response = await fetch(countyDataUrl);
+      // const countyData = await response.json(); 
+      // setCountyName(countyData.name);
 
-      const fetchedResponse = await fetch(`${baseURL}/api/counties/${countyId}/covid-display`);
+      const fetchedResponse = await fetch(`${baseURL}/api/counties/covid-display`, 
+      {headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: "POST",
+      body: JSON.stringify(requestData)
+
+      });
       const dataPromise : Promise<Covid[]>  = await (fetchedResponse.json()); 
       const data = await dataPromise; 
       
@@ -98,10 +134,20 @@ const CountyPage = (): JSX.Element => {
         
         data.map((val)=>{  
           dateLabels.push(val.date!); 
-          deaths.push(val.deaths!); 
-          icu.push(val.icu!); 
-          cases.push(val.cases!);
-          hosp.push(val.hosp!); 
+          if (deathsOn) {
+            deaths.push(val.deaths!);
+          }
+          if (icuOn) {
+            icu.push(val.icu!);
+          }
+          if (casesOn){
+            cases.push(val.cases!);
+          }
+          if (hospOn){
+            hosp.push(val.hosp!); 
+          }
+          
+          
 
         })
         const canvas : any = document.getElementById('myChart');

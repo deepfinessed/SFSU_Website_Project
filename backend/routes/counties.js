@@ -29,22 +29,26 @@ router.get('/:id', async function(req,res,next) {
     }
 });
 
-router.get('/:id/covid-display', async function(req,res,next) {
-  let id = parseInt(req.params.id);
+router.post('/covid-display', async function(req,res,next) {
+  console.log(req.body.countyId); 
+  let id = parseInt(req.body.countyId);
+  let sortDataBy = req.body.sortBy
+  let orderDataBy = req.body.orderBy
   if(isNaN(id)){
       res.sendStatus(404);
   }
-  let recordType = req.query.type ? req.query.type : 'all';
-  let today = new Date();
-  let past_date = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000);
+  
   let county = await prisma.covidRecord.findMany({
     where: {
        county_id : id,
         date: {
-          gte: past_date,
-          lte: today
+          gte: req.body.startDate,
+          lte: req.body.endDate
         }
-    }    
+    },  
+    orderBy: {
+       [sortDataBy] : orderDataBy
+    }
   });
   if(county) {
       res.json(county);
