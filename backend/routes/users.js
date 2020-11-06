@@ -93,7 +93,7 @@ router.post('/login/', async function(req, res, next) {
       maxAge: 1000 * 3600 * 24 * 365,
       path: '/api/users/refresh/'
     });
-    res.json(payload);
+    return res.json(payload);
   });
 });
 
@@ -107,10 +107,10 @@ router.post('/refresh/', async function(req, res, next) {
   }
   jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
     if(err){
-      res.status(400).send(err);
+      return res.status(400).send(err);
     }
     if(!decodedToken){
-      res.sendStatus(401);
+      return res.sendStatus(401);
     }
     const user = await prisma.user.findOne({
       where: {
@@ -118,7 +118,7 @@ router.post('/refresh/', async function(req, res, next) {
       },
     });
     if(!user) {
-      res.status(400).send(err);
+      return res.status(400).send(err);
     }
     const payload = {
       access_token: makeAccessJWT(user),

@@ -5,6 +5,8 @@ tags:
     description: Provides functionality for registering and authenticating users
   - name: Input
     description: Allows employees to input data
+  - name: Admin
+    description: Requires admin level privileges
 components:
   schemas:
     LoginTokenResponse:
@@ -359,9 +361,9 @@ paths:
         - in: header
           name: Authorization
           schema:
-          type: string
-          pattern: '^Bearer [A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$'
-          example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlbXBsb3llZUBlbXBsb3kuY29tIiwiYWNjZXNzIjoiZW1wbG95ZWUiLCJpYXQiOjE2MDM4MzQ4MDMsImV4cCI6MTYwMzgzODQwM30.jrsnyIwJmOM_JOFoAVi4XncSnl-loGysJ2X7Zj8ewX0.'
+            type: string
+            pattern: '^Bearer [A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$'
+            example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlbXBsb3llZUBlbXBsb3kuY29tIiwiYWNjZXNzIjoiZW1wbG95ZWUiLCJpYXQiOjE2MDM4MzQ4MDMsImV4cCI6MTYwMzgzODQwM30.jrsnyIwJmOM_JOFoAVi4XncSnl-loGysJ2X7Zj8ewX0.'
         - in: body
           name: Record
           description: The record to be created
@@ -376,5 +378,95 @@ paths:
           description: There was an error parsing the record contents and it could not be created
         "401":
           description: The Authorization header was missing or invalid
-
-
+  /admin/covid/verify/:
+    get:
+      summary: Validates a COVID record
+      tags: [Admin]
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            pattern: '^Bearer [A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$'
+            example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlbXBsb3llZUBlbXBsb3kuY29tIiwiYWNjZXNzIjoiZW1wbG95ZWUiLCJpYXQiOjE2MDM4MzQ4MDMsImV4cCI6MTYwMzgzODQwM30.jrsnyIwJmOM_JOFoAVi4XncSnl-loGysJ2X7Zj8ewX0.'
+        - in: query
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of validated record
+      responses:
+        "200":
+          description: The record has been validated
+        "401":
+          description: The Authorization header was missing or invalid
+        "403":
+          description: The user does not have admin privileges
+        "422":
+          description: The id field was missing or invalid
+  /admin/covid/verifyall/:
+    get:
+      summary: Validates all outstanding COVID records
+      tags: [Admin]
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            pattern: '^Bearer [A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$'
+            example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlbXBsb3llZUBlbXBsb3kuY29tIiwiYWNjZXNzIjoiZW1wbG95ZWUiLCJpYXQiOjE2MDM4MzQ4MDMsImV4cCI6MTYwMzgzODQwM30.jrsnyIwJmOM_JOFoAVi4XncSnl-loGysJ2X7Zj8ewX0.'
+      responses:
+        "200":
+          description: The records have been validated
+        "401":
+          description: The Authorization header was missing or invalid
+        "403":
+          description: The user does not have admin privileges
+        "422":
+          description: The id field was missing or invalid
+  /admin/fire/verify/:
+    get:
+      summary: Validates a fire record
+      tags: [Admin]
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            pattern: '^Bearer [A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$'
+            example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlbXBsb3llZUBlbXBsb3kuY29tIiwiYWNjZXNzIjoiZW1wbG95ZWUiLCJpYXQiOjE2MDM4MzQ4MDMsImV4cCI6MTYwMzgzODQwM30.jrsnyIwJmOM_JOFoAVi4XncSnl-loGysJ2X7Zj8ewX0.'
+        - in: query
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of validated record
+      responses:
+        "200":
+          description: The record has been validated
+        "401":
+          description: The Authorization header was missing or invalid
+        "403":
+          description: The user does not have admin privileges
+        "422":
+          description: The id field was missing or invalid
+  /admin/fire/verifyall/:
+    get:
+      summary: Validates all outstanding fire records
+      tags: [Admin]
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            pattern: '^Bearer [A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$'
+            example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlbXBsb3llZUBlbXBsb3kuY29tIiwiYWNjZXNzIjoiZW1wbG95ZWUiLCJpYXQiOjE2MDM4MzQ4MDMsImV4cCI6MTYwMzgzODQwM30.jrsnyIwJmOM_JOFoAVi4XncSnl-loGysJ2X7Zj8ewX0.'
+      responses:
+        "200":
+          description: The records have been validated
+        "401":
+          description: The Authorization header was missing or invalid
+        "403":
+          description: The user does not have admin privileges
+        "422":
+          description: The id field was missing or invalid
