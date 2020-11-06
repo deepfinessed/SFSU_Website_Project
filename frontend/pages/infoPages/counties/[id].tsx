@@ -5,7 +5,6 @@ import { Container } from '@components/Layouts';
 import { Text } from '@components/DataDisplay';
 import Covid from '../../../types/Covid';
 import { Chart } from 'chart.js';
-import { Field, Formik } from 'formik';
 
 let covidChart : any = null;
   let canvas : any = null; 
@@ -17,20 +16,20 @@ const CountyPage = (): JSX.Element => {
   const router = useRouter();
   const [initialized, setInit] = useState(false);
   const [countyName, setCountyName] = useState(''); 
-  const [startDate, setStartDate] = useState(new Date(Date.now() - 90 * 24 * 60 * 60 * 1000)); 
-  const [endDate, setEndDate] = useState(new Date(Date.now())); 
+  const [covidStartDate, setcovidStartDate] = useState(new Date(Date.now() - 120 * 24 * 60 * 60 * 1000)); 
+  const [covidEndDate, setcovidEndDate] = useState(new Date(Date.now() - 24 * 60 * 60 * 1000)); 
   const [hospOn, setHospOn] = useState(true); 
   const [casesOn, setCasesOn] = useState(true); 
   const [deathsOn, setdeathsOn] = useState(true); 
-  const [sortBy, setSortBy] = useState("date"); 
-  const [orderBy, setorderBy] = useState("asc"); 
+  const [covidSortBy, setcovidSortBy] = useState("date"); 
+  const [covidOrderBy, setcovidOrderBy] = useState("asc"); 
   const [icuOn, setIcuOn] = useState(true); 
-  const [limit, setLimit] = useState(20); 
+  const [covidLimit, setcovidLimit] = useState(20); 
   const countyId = router.query.id;
   const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
   const countyDataUrl = `${baseURL}/api/counties/${countyId}`;
    
-  function parseDate(s) {
+  function parseDate(s : any) {
     var b = s.split(/\D/);
     return new Date(b[0], --b[1], b[2]);
   }
@@ -113,17 +112,16 @@ const CountyPage = (): JSX.Element => {
       let requestData = 
       {
         countyId : countyId,
-        startDate : startDate, 
-        endDate : endDate, 
+        startDate : covidStartDate, 
+        endDate : covidEndDate, 
         casesOn : casesOn,
         icuOn : icuOn, 
         hospOn : hospOn, 
         deathsOn : deathsOn, 
-        sortBy : sortBy,
-        orderBy : orderBy, 
-        limit : limit
-      }
-      console.log(requestData.orderBy); 
+        sortBy : covidSortBy,
+        orderBy : covidOrderBy, 
+        limit : covidLimit
+      } 
       const response = await fetch (countyDataUrl);
       //const response = await fetch(countyDataUrl);
       const countyData = await response.json(); 
@@ -222,6 +220,7 @@ const CountyPage = (): JSX.Element => {
       if (!initialized) {
         loadMap();
       }
+      document.getElementById("covidInputs")!.style.display = "none";
       
       document.getElementById("covidChart")!.style.display = "none"; 
     } else {
@@ -231,7 +230,7 @@ const CountyPage = (): JSX.Element => {
         }
     }
     
-  }, [initialized, countyId, sortBy, orderBy, deathsOn, icuOn, casesOn, hospOn, startDate, endDate, limit]);
+  }, [initialized, countyId, covidSortBy, covidOrderBy, deathsOn, icuOn, casesOn, hospOn, covidStartDate, covidEndDate, covidLimit]);
 
   return (
     <div>
@@ -253,8 +252,8 @@ const CountyPage = (): JSX.Element => {
           <select
           
           id="sortDropDown"
-          onChange={(event) => setSortBy(event.target.value)}
-          value = {sortBy}
+          onChange={(event) => setcovidSortBy(event.target.value)}
+          value = {covidSortBy}
           >
             <option value="date">date</option>
           <option value="icu">ICU</option>
@@ -268,7 +267,7 @@ const CountyPage = (): JSX.Element => {
          <select
           
           id="orderDropDown"
-          onChange={(event) => setorderBy(event.target.value)}
+          onChange={(event) => setcovidOrderBy(event.target.value)}
           >
           <option value="asc">Asc</option>
           <option value="desc">Desc</option>
@@ -279,9 +278,9 @@ const CountyPage = (): JSX.Element => {
          Icu: <input type="checkbox" checked={icuOn} onChange ={(event) => setIcuOn(event.target.checked)} />
          Cases: <input type="checkbox" checked={casesOn} onChange ={(event) => setCasesOn(event.target.checked)} />
          Hospitalizations: <input type="checkbox" checked={hospOn} onChange ={(event) => setHospOn(event.target.checked)} />
-         Start Date: <input type = "date" value = {startDate.toISOString().split('T')[0]} onChange  = {(event) => setStartDate(parseDate(event.target.value))}></input>
-         End Date: <input type = "date" value = {endDate.toISOString().split('T')[0]} onChange  = {(event) => setEndDate(parseDate(event.target.value))}></input>
-         Limit: <input type = "range" value = {limit} onChange ={(event) => setLimit(parseInt(event.target.value))} min = "5" max = "100"></input>
+         Start Date: <input type = "date" value = {covidStartDate.toISOString().split('T')[0]}onChange  = {(event) => setcovidStartDate(parseDate(event.target.value))}></input>
+         End Date: <input type = "date" value = {covidEndDate.toISOString().split('T')[0]} onChange  = {(event) => setcovidEndDate(parseDate(event.target.value))}></input>
+         Limit (5 to 100): <input type = "range" value = {covidLimit} onChange ={(event) => setcovidLimit(parseInt(event.target.value))} min = "5" max = "100"></input>
         </div>
         <div id = "fireInputs">
 
