@@ -30,7 +30,33 @@ router.get('/:id', async function(req,res,next) {
 });
 
 router.post('/covid-display', async function(req,res,next) {
-  console.log(req.body.countyId); 
+  let id = parseInt(req.body.countyId);
+  let sortDataBy = req.body.sortBy
+  let orderDataBy = req.body.orderBy
+  if(isNaN(id)){
+      res.sendStatus(404);
+  }
+  
+  let county = await prisma.covidRecord.findMany({
+    take : req.body.limit,
+    where: {
+       county_id : id,
+        date: {
+          gte: req.body.startDate,
+          lte: req.body.endDate
+        }
+    },  
+    orderBy: {
+       [sortDataBy] : orderDataBy
+    }
+  });
+  if(county) {
+      res.json(county);
+  } else {
+      res.sendStatus(404);
+  }
+});
+router.post('/fire-display', async function(req,res,next) {
   let id = parseInt(req.body.countyId);
   let sortDataBy = req.body.sortBy
   let orderDataBy = req.body.orderBy
