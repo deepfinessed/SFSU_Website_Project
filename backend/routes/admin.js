@@ -3,6 +3,11 @@ import Prisma from '@prisma/client';
 
 import verifyJWT from "../utils/verifyJWT.js";
 import makeTransporter from "../utils/transporter.js";
+import settings from "../settings.js";
+import makeCovidMail from "../utils/covidMail.js";
+import makeFireMail from "../utils/fireMail.js";
+import covidAlert from "../utils/covidAlert.js";
+import fireAlert from "../utils/fireAlert";
 
 const router = express.Router();
 
@@ -52,20 +57,27 @@ router.get('/covid/verify/', verifyAdmin, async function activateRecord(req, res
       },
       data: {
         approved: true,
+      },
+      include: {
+        county: true,
       }
     });
     if(!record) {
-      res.status(422).send('No such record could be fine');
+      return res.status(422).send('No such record could be fine');
+    }
+    res.sendStatus(200);
+    // Check to see if we should send emails
+    if(settings.alertsEnabled && record.cases / record.county.population >= settings.covidAlertRatio) {
+      covidAlert(record).catch(err => console.log(err));
     }
   } catch(err) {
-    res.status(422).send('No such record could be fine');
+    res.status(422).send('No such record could be found');
   }
-  res.sendStatus(200);
 });
 
 router.get('/covid/verifyall/', verifyAdmin, async function activateRecord(req, res, next) {
   try {
-    const record = await prisma.covidRecord.update({
+    const records = await prisma.covidRecord.update({
       where: {
         approved: false,
       },
@@ -73,8 +85,8 @@ router.get('/covid/verifyall/', verifyAdmin, async function activateRecord(req, 
         approved: true,
       }
     });
-    if(!record) {
-      res.status(422).send('No such record could be fine');
+    if(!records) {
+      res.status(422).send('No such records could be fine');
     }
   } catch(err) {
     res.status(422).send('No such record could be fine');
@@ -94,15 +106,18 @@ router.get('/fire/verify/', verifyAdmin, async function activateRecord(req, res,
       },
       data: {
         approved: true,
-      }
+      },
     });
     if(!record) {
       res.status(422).send('No such record could be fine');
     }
+    res.sendStatus(200);
+    if(settings.alertsEnabled && record.EvacuationLevel >= settings.fireAlertLevel) {
+      fireAlert(record).catch(err => console.log(err));
+    }
   } catch(err) {
     res.status(422).send('No such record could be fine');
   }
-  res.sendStatus(200);
 });
 
 router.get('/fire/verifyall/', verifyAdmin, async function activateRecord(req, res, next) {
