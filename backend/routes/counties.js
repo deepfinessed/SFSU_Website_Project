@@ -64,10 +64,11 @@ router.post('/fire-display', async function(req,res,next) {
       res.sendStatus(404);
   }
   
-  let county = await prisma.covidRecord.findMany({
+  let county = await prisma.fireRecord.findMany({
+    take : req.body.limit,
     where: {
        county_id : id,
-        date: {
+        start_date: {
           gte: req.body.startDate,
           lte: req.body.endDate
         }

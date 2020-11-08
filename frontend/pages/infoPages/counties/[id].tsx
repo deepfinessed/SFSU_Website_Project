@@ -4,7 +4,15 @@ import { useRouter } from 'next/router';
 import { Container } from '@components/Layouts';
 import { Text } from '@components/DataDisplay';
 import Covid from '../../../types/Covid';
+import Fire from '../../../types/Fire'; 
 import { Chart } from 'chart.js';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
 
 let covidChart : any = null;
   let canvas : any = null; 
@@ -24,7 +32,14 @@ const CountyPage = (): JSX.Element => {
   const [covidSortBy, setcovidSortBy] = useState("date"); 
   const [covidOrderBy, setcovidOrderBy] = useState("asc"); 
   const [icuOn, setIcuOn] = useState(true); 
-  const [covidLimit, setcovidLimit] = useState(20); 
+  const [covidLimit, setcovidLimit] = useState(20);
+  const [fireStartDate, setFireStartDate] = useState(new Date(Date.now() - 120 * 24 * 60 * 60 * 1000)) ;
+  const [fireEndDate, setFireEndDate] = useState(new Date(Date.now() - 24 * 60 * 60 * 1000));
+  const [fireSortBy, setFireSortBy] = useState("aqi"); 
+  const [fireOrderBy, setFireOrderBy] = useState("asc");
+  const [fireLimit, setFireLimit] = useState(20); 
+  const [fireList, setFireList] = useState<Array<Fire>>([]); 
+
   const countyId = router.query.id;
   const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
   const countyDataUrl = `${baseURL}/api/counties/${countyId}`;
@@ -41,6 +56,9 @@ const CountyPage = (): JSX.Element => {
     }  else {
       setInit(true);
     }
+    covidChart = null;
+    canvas  = null; 
+    ctx  = null;
     if (canvas === null) {
       canvas = document.getElementById('covidChart');
       ctx = canvas.getContext("2d");
@@ -108,7 +126,7 @@ const CountyPage = (): JSX.Element => {
     }
 
     async function loadCovidChart (){
-      
+      console.log("load chart"); 
       let requestData = 
       {
         countyId : countyId,
@@ -211,26 +229,114 @@ const CountyPage = (): JSX.Element => {
             }
           },
         });
+        console.log("load chart end"); 
+      
+    }
+
+    async function loadFireChart (){
+      
+      let requestData = 
+      {
+        countyId : countyId,
+        startDate : fireStartDate, 
+        endDate : fireEndDate, 
+        sortBy : fireSortBy,
+        orderBy : fireOrderBy, 
+        limit : fireLimit
+      } 
+      const response = await fetch (countyDataUrl);
+      //const response = await fetch(countyDataUrl);
+      const countyData = await response.json(); 
+      setCountyName(countyData.name);
+
+      const fetchedResponse = await fetch(`${baseURL}/api/counties/fire-display`, 
+      {headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: "POST",
+      body: JSON.stringify(requestData)
+
+      });
+      const dataPromise : Promise<Fire[]>  = await (fetchedResponse.json()); 
+      const data = await dataPromise; 
+      setFireList(data); 
       
     }
     if (router.query.type === "Covid") {
       loadCovidChart(); 
       document.getElementById("mapid")!.style.display = "none"; 
+      document.getElementById("fireTable")!.style.display = "none";
+      document.getElementById("fireInputs")!.style.display = "none";
     } else if (router.query.type === "Fire") {
       if (!initialized) {
+        
         loadMap();
       }
+      loadFireChart(); 
       document.getElementById("covidInputs")!.style.display = "none";
-      
       document.getElementById("covidChart")!.style.display = "none"; 
     } else {
         loadCovidChart(); 
+        loadFireChart(); 
         if (!initialized) {
           loadMap();
         }
     }
     
-  }, [initialized, countyId, covidSortBy, covidOrderBy, deathsOn, icuOn, casesOn, hospOn, covidStartDate, covidEndDate, covidLimit]);
+  }, [initialized, countyId, covidSortBy, covidOrderBy, deathsOn, icuOn, casesOn, hospOn, covidStartDate, covidEndDate, covidLimit,
+  fireEndDate, fireStartDate, fireSortBy, fireLimit, fireOrderBy, fireSortBy]);
+
+  type FireTableProps = {
+    fireArray: Array<Fire>;
+  };
+
+  const FireTable = ({ fireArray }: FireTableProps): JSX.Element => {
+    return (
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell>Aqi</TableCell>
+              <TableCell>Area</TableCell>
+              <TableCell>Start Date</TableCell>
+              <TableCell>End Date</TableCell>
+              <TableCell>Active Status</TableCell>
+              <TableCell>Evacuation Level</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {fireArray.map((fireEntry) => (
+              <TableRow>
+                <TableCell component="th" scope="row">
+                  {fireEntry.name}
+                </TableCell>
+                <TableCell>
+                {fireEntry.aqi}
+                </TableCell>
+                <TableCell>
+                {fireEntry.area}
+                </TableCell>
+                <TableCell>
+                {fireEntry.start_date}
+                </TableCell>
+                <TableCell>
+                {fireEntry.end_date}
+                </TableCell>
+                <TableCell>
+                {fireEntry.active}
+                </TableCell>
+                <TableCell>
+                {fireEntry.EvacuationLevel}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    );
+  };
 
   return (
     <div>
@@ -282,11 +388,48 @@ const CountyPage = (): JSX.Element => {
          End Date: <input type = "date" value = {covidEndDate.toISOString().split('T')[0]} onChange  = {(event) => setcovidEndDate(parseDate(event.target.value))}></input>
          Limit (5 to 100): <input type = "range" value = {covidLimit} onChange ={(event) => setcovidLimit(parseInt(event.target.value))} min = "5" max = "100"></input>
         </div>
+        <canvas id="covidChart" width="1000" height="1000" style={{ height: '800px',width: '800px' }}/>
+        <br></br>
+        <br></br>
         <div id = "fireInputs">
+          Sort By:
+            <select
+            
+            id="sortDropDown"
+            onChange={(event) => setFireSortBy(event.target.value)}
+            value = {fireSortBy}
+            >
+            <option value="start_date">Start date</option>
+            <option value="name">Name</option>
+            <option value="aqi">Aqi</option>
+            <option value="area">Area</option>
+            <option value="EvacuationLevel">Evacuation Level</option>
+            
+
+          </select>
+          Order:
+          <select
+            
+            id="orderDropDown"
+            onChange={(event) => setFireOrderBy(event.target.value)}
+            >
+            <option value="asc">Asc</option>
+            <option value="desc">Desc</option>
+      
+          </select>
+
+          Start Date: <input type = "date" value = {fireStartDate.toISOString().split('T')[0]}onChange  = {(event) => setFireStartDate(parseDate(event.target.value))}></input>
+         End Date: <input type = "date" value = {fireEndDate.toISOString().split('T')[0]} onChange  = {(event) => setFireEndDate(parseDate(event.target.value))}></input>
+         Limit (5 to 100): <input type = "range" value = {fireLimit} onChange ={(event) => setFireLimit(parseInt(event.target.value))} min = "5" max = "100"></input>
 
         </div>
+        <div  id = "fireTable">
+          <FireTable fireArray={fireList}></FireTable>
+        </div>
+        
+        {/* <canvas id="fireChart" width="1000" height="1000" style={{ height: '800px',width: '800px' }}/> */}
 
-        <canvas id="covidChart" width="1000" height="1000" style={{ height: '800px',width: '800px' }}/>
+       
       </Container>
       <div id="mapid" style={{ height: '500px' }} />
       
