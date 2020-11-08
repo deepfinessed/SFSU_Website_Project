@@ -109,7 +109,7 @@ router.get('/fire/verify/', verifyAdmin, async function activateRecord(req, res,
       },
     });
     if(!record) {
-      res.status(422).send('No such record could be fine');
+      res.status(422).send('No such record could be found');
     }
     res.sendStatus(200);
     if(settings.alertsEnabled && record.EvacuationLevel >= settings.fireAlertLevel) {
