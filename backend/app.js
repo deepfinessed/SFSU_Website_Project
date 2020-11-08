@@ -11,14 +11,15 @@ import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import cors from 'cors';
 
-dotenv.config();
-
 const __dirname = dirname(fileURLToPath(import.meta.url));
+
+//dotenv.config();
 
 import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
 import countiesRouter from './routes/counties.js';
 import recordsRouter from './routes/records.js';
+import adminRouter from './routes/admin.js';
 
 const app = express();
 
@@ -79,6 +80,7 @@ app.use('/', indexRouter);
 app.use('/users/', usersRouter);
 app.use('/counties', countiesRouter);
 app.use('/records/', recordsRouter);
+app.use('/admin/', adminRouter);
 
 app.use(
     "/docs",

@@ -35,7 +35,7 @@ router.post('/covid/', async function(req, res, next) {
   try {
     const countyDb = await prisma.county.findOne({
       where: {
-        name: countyName,
+        name: county,
       }
     });
     if(!countyDb) {
@@ -88,6 +88,7 @@ router.post('/fire/', async function(req, res, next){
   });
   if(!countyDb) {
     res.status(422).send("Could not find that county");
+    return;
   }
   const record = await prisma.fireRecord.create({
     data: {

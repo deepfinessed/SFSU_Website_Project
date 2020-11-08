@@ -20,7 +20,7 @@ router.get('/', function(req, res, next) {
 router.post('/register/', async function (req,res,next) {
   console.log("Received request:");
   console.log(req.body);
-  const {firstName, lastName, email, password, phone} = req.body;
+  const {firstName, lastName, email, password, phone, county} = req.body;
   console.log("Email parsed as:");
   console.log(email);
   const oldUser = await prisma.user.findOne({
@@ -45,6 +45,11 @@ router.post('/register/', async function (req,res,next) {
           passwordHash: hash,
           phone: phone,
           access: 'standard',
+          county: {
+            connect: {
+              name: county,
+            },
+          },
         },
       });
     });
@@ -68,6 +73,7 @@ router.post('/login/', async function(req, res, next) {
   console.log(user);
   if(!user){
     res.status(422).send('There is no user with that email');
+    return;
   }
   bcrypt.compare(password, user.passwordHash, (err, result) => {
     if(err || !result){
@@ -87,7 +93,7 @@ router.post('/login/', async function(req, res, next) {
       maxAge: 1000 * 3600 * 24 * 365,
       path: '/api/users/refresh/'
     });
-    res.json(payload);
+    return res.json(payload);
   });
 });
 
@@ -101,10 +107,10 @@ router.post('/refresh/', async function(req, res, next) {
   }
   jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
     if(err){
-      res.status(400).send(err);
+      return res.status(400).send(err);
     }
     if(!decodedToken){
-      res.sendStatus(401);
+      return res.sendStatus(401);
     }
     const user = await prisma.user.findOne({
       where: {
@@ -112,7 +118,7 @@ router.post('/refresh/', async function(req, res, next) {
       },
     });
     if(!user) {
-      res.status(400).send(err);
+      return res.status(400).send(err);
     }
     const payload = {
       access_token: makeAccessJWT(user),
@@ -129,7 +135,7 @@ router.post('/employee/register/', verifyJWT, async function (req, res, next) {
   }
   console.log("Received request:");
   console.log(req.body);
-  const {firstName, lastName, email, password, phone} = req.body;
+  const {firstName, lastName, email, password, phone, county} = req.body;
   console.log("Email parsed as:");
   console.log(email);
   const oldUser = await prisma.user.findOne({
@@ -154,6 +160,11 @@ router.post('/employee/register/', verifyJWT, async function (req, res, next) {
           passwordHash: hash,
           phone: phone,
           access: 'employee',
+          county: {
+            connect: {
+              name: county,
+            },
+          },
         },
       });
       if(!newUser) {

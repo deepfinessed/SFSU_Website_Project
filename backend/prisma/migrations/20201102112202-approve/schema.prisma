@@ -3,7 +3,7 @@
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 generator client {
@@ -19,7 +19,6 @@ model County {
     longitude    Float?
     covidRecords CovidRecord[]
     fireRecords  FireRecord[]
-    users        User[]
     @@index([name])
 }
 
@@ -57,9 +56,5 @@ model User {
     passwordHash String
     phone        String   @unique
     access       String
-    county_id    Int
-    county       County   @relation(fields: [county_id], references: [id])
-    @@index([email])
-    @@index([county_id])
 }
 

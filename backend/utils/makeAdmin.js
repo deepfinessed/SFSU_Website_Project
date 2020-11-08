@@ -20,7 +20,7 @@ async function makeAdminAccount(admin) {
   let newUser;
 
   bcrypt.hash(admin.password, saltRounds, async (err, hash) => {
-    const {firstName,lastName,email,phone} = admin;
+    const {firstName,lastName,email,phone, county} = admin;
     newUser = await prisma.user.create({
       data: {
         email,
@@ -29,6 +29,11 @@ async function makeAdminAccount(admin) {
         phone,
         passwordHash: hash,
         access: 'admin',
+        county: {
+          connect: {
+            name: county,
+          },
+        },
       },
     });
     console.log(newUser);
@@ -49,12 +54,13 @@ async function makeAdminFromArgs() {
       firstName: args[2],
       lastName: args[3],
       phone: args[4],
+      county: args[5],
     };
     await makeAdminAccount(admin);
   } catch (err) {
     console.log(err);
-    console.log("Usage: [email] [password] [firstName] [lastName] [phone]");
-    console.log("Example: admin@admin.com mypassword John Smith 5554495218");
+    console.log("Usage: [email] [password] [firstName] [lastName] [phone] [county]");
+    console.log("Example: admin@admin.com mypassword John Smith 5554495218 'San Mateo County'");
   }
   setTimeout(() => process.exit(0), 3000);
 }
