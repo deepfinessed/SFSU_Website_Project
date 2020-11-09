@@ -29,7 +29,6 @@ const CovidDataEntry = (): JSX.Element => {
             .catch((err) => console.log(err));
         }}
         initialValues={{
-          county_id: '',
           county: '',
           deaths: 0,
           icu: 0,
@@ -41,22 +40,18 @@ const CovidDataEntry = (): JSX.Element => {
         {({ handleSubmit }) => (
           <form onSubmit={handleSubmit}>
             <div>
+              <label> County Name 
               <Field
-                name="county_id"
-                required
-                placeholder="County Code"
-                component={InputField}
-              />
-            </div>
-            <div>
-              <Field
-                name="countyName"
+                name="county"
                 required
                 placeholder="County name"
                 component={InputField}
               />
+              </label>
             </div>
+            <br />
             <div>
+              <label>Number of Deaths</label>
               <Field
                 name="deaths"
                 required
@@ -65,7 +60,9 @@ const CovidDataEntry = (): JSX.Element => {
                 type="number"
               />
             </div>
+            <br />
             <div>
+            <label>Number of ICU patients</label>
               <Field
                 name="icu"
                 required
@@ -74,7 +71,9 @@ const CovidDataEntry = (): JSX.Element => {
                 type="number"
               />
             </div>
+            <br />
             <div>
+            <label>Number of Hospitals</label>
               <Field
                 name="hosp"
                 required
@@ -83,7 +82,9 @@ const CovidDataEntry = (): JSX.Element => {
                 type="number"
               />
             </div>
+            <br />
             <div>
+            <label> Number of cases</label>
               <Field
                 name="cases"
                 required
@@ -92,7 +93,9 @@ const CovidDataEntry = (): JSX.Element => {
                 type="number"
               />
             </div>
+            <br />
             <div>
+            <label>Todays date</label>
               <Field
                 name="date"
                 required
@@ -101,6 +104,7 @@ const CovidDataEntry = (): JSX.Element => {
                 type="date"
               />
             </div>
+            <br />
 
             <button type="submit">submit</button>
           </form>
