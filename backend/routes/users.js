@@ -122,7 +122,7 @@ router.post('/refresh/', async function(req, res, next) {
     }
     const payload = {
       access_token: makeAccessJWT(user),
-      token_type: 'bearer',
+      token_type: 'Bearer',
     }
     return res.json(payload);
   });
