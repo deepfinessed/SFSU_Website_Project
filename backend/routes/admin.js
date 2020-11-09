@@ -7,7 +7,7 @@ import settings from "../settings.js";
 import makeCovidMail from "../utils/covidMail.js";
 import makeFireMail from "../utils/fireMail.js";
 import covidAlert from "../utils/covidAlert.js";
-import fireAlert from "../utils/fireAlert";
+import fireAlert from "../utils/fireAlert.js";
 
 const router = express.Router();
 
@@ -51,7 +51,16 @@ router.get('/covid/verify/', verifyAdmin, async function activateRecord(req, res
     res.status(422).send('There is no record id');
   }
   try {
-    const record = await prisma.covidRecord.update({
+    const record = await prisma.covidRecord.findOne({
+      where: {
+        id
+      },
+      include: {
+        county: true,
+      }
+    });
+
+    const count = await prisma.covidRecord.update({
       where: {
         id
       },
@@ -62,7 +71,7 @@ router.get('/covid/verify/', verifyAdmin, async function activateRecord(req, res
         county: true,
       }
     });
-    if(!record) {
+    if(!count) {
       return res.status(422).send('No such record could be fine');
     }
     res.sendStatus(200);
@@ -77,7 +86,15 @@ router.get('/covid/verify/', verifyAdmin, async function activateRecord(req, res
 
 router.get('/covid/verifyall/', verifyAdmin, async function activateRecord(req, res, next) {
   try {
-    const records = await prisma.covidRecord.update({
+    const records = await prisma.covidRecord.findMany({
+      where: {
+        approved: false,
+      },
+      include: {
+        county: true,
+      },
+    });
+    const count = await prisma.covidRecord.updateMany({
       where: {
         approved: false,
       },
@@ -85,13 +102,25 @@ router.get('/covid/verifyall/', verifyAdmin, async function activateRecord(req, 
         approved: true,
       }
     });
-    if(!records) {
-      res.status(422).send('No such records could be fine');
+    if(!count) {
+      console.log('No count for count:');
+      console.log(count);
+      return res.status(422).send('No such records could be found');
+    }
+    res.sendStatus(200);
+    if(settings.alertsEnabled) {
+      records.forEach((record) => {
+        if(record.cases / record.county.population >= settings.covidAlertRatio) {
+          console.log('Alerting:');
+          console.log(record);
+          covidAlert(record).catch(err => console.log(err));
+        }
+      });
     }
   } catch(err) {
-    res.status(422).send('No such record could be fine');
+    console.log(err);
+    res.status(422).send('No such record could be found');
   }
-  res.sendStatus(200);
 });
 
 router.get('/fire/verify/', verifyAdmin, async function activateRecord(req, res, next) {
@@ -116,13 +145,18 @@ router.get('/fire/verify/', verifyAdmin, async function activateRecord(req, res,
       fireAlert(record).catch(err => console.log(err));
     }
   } catch(err) {
-    res.status(422).send('No such record could be fine');
+    return res.status(422).send('No such record could be fine');
   }
 });
 
 router.get('/fire/verifyall/', verifyAdmin, async function activateRecord(req, res, next) {
   try {
-    const record = await prisma.covidRecord.update({
+    const records = await prisma.fireRecord.findMany({
+      where: {
+        approved: false,
+      }
+    });
+    const count = await prisma.fireRecord.updateMany({
       where: {
         approved: false,
       },
@@ -130,13 +164,20 @@ router.get('/fire/verifyall/', verifyAdmin, async function activateRecord(req, r
         approved: true,
       }
     });
-    if(!record) {
-      res.status(422).send('No such record could be fine');
+    if(!count) {
+      return res.status(422).send('No such record could be fine');
+    }
+    res.sendStatus(200);
+    if(settings.alertsEnabled) {
+      records.forEach((record) => {
+        if(record.EvacuationLevel >= settings.fireAlertLevel) {
+          fireAlert(record).catch(err => console.log(err));
+        }
+      });
     }
   } catch(err) {
     res.status(422).send('No such record could be fine');
   }
-  res.sendStatus(200);
 });
 
 export default router;
