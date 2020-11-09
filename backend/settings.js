@@ -4,7 +4,7 @@ const settings = {
   covidAlertRatio: .05,
   //threshold for fire alert level
   fireAlertLevel: 3,
-  alertsEnabled: false,
+  alertsEnabled: true,
 };
 
 export default settings;
