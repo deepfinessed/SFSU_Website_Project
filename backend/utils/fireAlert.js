@@ -19,7 +19,7 @@ export default async function fireAlert(record) {
   });
   const users = county.users;
   for (let user of users) {
-    const message = makeFireMail(user, record, '');
+    const message = makeFireMail(user, record);
     transporter.sendMail(message, (err, info) => {
       if(err) {
         console.log(err);

@@ -19,7 +19,7 @@ export default async function covidAlert(record) {
   });
   const users = county.users;
   for (let user of users) {
-    const message = makeCovidMail(user, record, '');
+    const message = makeCovidMail(user, record);
     transporter.sendMail(message, (err, info) => {
       if(err) {
         console.log(err);
