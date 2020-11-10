@@ -341,7 +341,7 @@ const CountyPage = (): JSX.Element => {
   return (
     <div>
       <Container align="center">
-        <Text variant="h3">
+        <Text variant = "h3">
           {router.query.type
             ? // @ts-ignore
               router.query.type.charAt(0).toUpperCase() +
@@ -353,8 +353,12 @@ const CountyPage = (): JSX.Element => {
         </Text>
         <br />
         
-        <div id= "covidInputs">
-        Sort By:
+        <div id= "covidInputs" style = {{background : "white", color : "black"}}>
+        
+            Sort By:
+        
+        
+        
           <select
           
           id="sortDropDown"
@@ -369,7 +373,10 @@ const CountyPage = (): JSX.Element => {
           
 
          </select>
-         Order:
+         
+           Order:
+         
+         
          <select
           
           id="orderDropDown"
@@ -380,19 +387,42 @@ const CountyPage = (): JSX.Element => {
     
          </select>
          <br></br>
-         Deaths: <input type="checkbox" checked={deathsOn} onChange ={(event) => setdeathsOn(event.target.checked)} />
-         Icu: <input type="checkbox" checked={icuOn} onChange ={(event) => setIcuOn(event.target.checked)} />
-         Cases: <input type="checkbox" checked={casesOn} onChange ={(event) => setCasesOn(event.target.checked)} />
-         Hospitalizations: <input type="checkbox" checked={hospOn} onChange ={(event) => setHospOn(event.target.checked)} />
-         Start Date: <input type = "date" value = {covidStartDate.toISOString().split('T')[0]}onChange  = {(event) => setcovidStartDate(parseDate(event.target.value))}></input>
-         End Date: <input type = "date" value = {covidEndDate.toISOString().split('T')[0]} onChange  = {(event) => setcovidEndDate(parseDate(event.target.value))}></input>
-         Limit (5 to 100): <input type = "range" value = {covidLimit} onChange ={(event) => setcovidLimit(parseInt(event.target.value))} min = "5" max = "100"></input>
+         
+           Deaths:
+         
+          <input type="checkbox" checked={deathsOn} onChange ={(event) => setdeathsOn(event.target.checked)} />
+         
+         Icu:
+           <input type="checkbox" checked={icuOn} onChange ={(event) => setIcuOn(event.target.checked)} />
+         
+           Cases:
+         
+          <input type="checkbox" checked={casesOn} onChange ={(event) => setCasesOn(event.target.checked)} />
+         
+         Hospitalizations:
+            <input type="checkbox" checked={hospOn} onChange ={(event) => setHospOn(event.target.checked)} />
+         <br></br>
+         
+         Start Date:
+            <input type = "date" value = {covidStartDate.toISOString().split('T')[0]}onChange  = {(event) => setcovidStartDate(parseDate(event.target.value))}></input>
+         
+         End Date:
+         
+           <input type = "date" value = {covidEndDate.toISOString().split('T')[0]} onChange  = {(event) => setcovidEndDate(parseDate(event.target.value))}></input>
+         
+         Limit {covidLimit}:
+            
+           <button onClick = {() => setcovidLimit(Math.max(0, covidLimit - 10))}> - 10</button>
+            <button onClick = {() => setcovidLimit(Math.min(100, covidLimit + 10))}> + 10 </button>
         </div>
         <canvas id="covidChart" width="1000" height="1000" style={{ height: '800px',width: '800px' }}/>
         <br></br>
         <br></br>
-        <div id = "fireInputs">
-          Sort By:
+        <div id = "fireInputs" style = {{background : "white", color : "black"}}>
+          
+            Sort By:
+          
+          
             <select
             
             id="sortDropDown"
@@ -407,7 +437,10 @@ const CountyPage = (): JSX.Element => {
             
 
           </select>
-          Order:
+          
+            Order:
+          
+          
           <select
             
             id="orderDropDown"
@@ -418,10 +451,18 @@ const CountyPage = (): JSX.Element => {
       
           </select>
 
-          Start Date: <input type = "date" value = {fireStartDate.toISOString().split('T')[0]}onChange  = {(event) => setFireStartDate(parseDate(event.target.value))}></input>
-         End Date: <input type = "date" value = {fireEndDate.toISOString().split('T')[0]} onChange  = {(event) => setFireEndDate(parseDate(event.target.value))}></input>
-         Limit (5 to 100): <input type = "range" value = {fireLimit} onChange ={(event) => setFireLimit(parseInt(event.target.value))} min = "5" max = "100"></input>
-
+            
+          
+          Start Date:
+             <input type = "date" value = {fireStartDate.toISOString().split('T')[0]}onChange  = {(event) => setFireStartDate(parseDate(event.target.value))}></input>
+         
+         End Date:
+            <input type = "date" value = {fireEndDate.toISOString().split('T')[0]} onChange  = {(event) => setFireEndDate(parseDate(event.target.value))}></input>
+         
+         Limit {fireLimit}:
+            
+           <button onClick = {() => setFireLimit(Math.max(0, covidLimit - 10))}> - 10</button>
+            <button onClick = {() => setFireLimit(Math.min(100, covidLimit + 10))}> + 10 </button>
         </div>
         <div  id = "fireTable">
           <FireTable fireArray={fireList}></FireTable>
