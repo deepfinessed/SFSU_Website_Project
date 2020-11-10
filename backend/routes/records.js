@@ -29,7 +29,6 @@ router.post('/covid/', async function(req, res, next) {
     hosp,
     cases,
     date,
-    countyName,
   } = req.body;
   const dateObj = new Date(date);
   try {
@@ -68,7 +67,7 @@ router.post('/covid/', async function(req, res, next) {
 });
 
 router.post('/fire/', async function(req, res, next){
-  if(req.token?.access !== 'admin' || req.token?.access !== 'employee'){
+  if(req.token?.access !== 'admin' && req.token?.access !== 'employee'){
     res.sendStatus(403);
   }
   const {
@@ -83,7 +82,7 @@ router.post('/fire/', async function(req, res, next){
   } = req.body;
   const countyDb = await prisma.county.findOne({
     where: {
-      name: name,
+      name: county,
     }
   });
   if(!countyDb) {
@@ -94,7 +93,7 @@ router.post('/fire/', async function(req, res, next){
     data: {
       county: {
         connect: {
-          id: county.id,
+          id: countyDb.id,
         }
       },
       start_date,
