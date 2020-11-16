@@ -48,6 +48,11 @@ router.post('/covid/', async function(req, res, next) {
             id: countyDb.id,
           }
         },
+        submitter: {
+          connect: {
+            email: req.token.sub,
+          }
+        },
         date: dateObj,
         deaths,
         icu,
@@ -60,6 +65,7 @@ router.post('/covid/', async function(req, res, next) {
       return;
     }
   } catch(err) {
+    console.log(err);
     res.status(422).send(err);
     return;
   }
@@ -94,6 +100,11 @@ router.post('/fire/', async function(req, res, next){
       county: {
         connect: {
           id: countyDb.id,
+        }
+      },
+      submitter: {
+        connect: {
+          email: req.token.sub,
         }
       },
       start_date,
