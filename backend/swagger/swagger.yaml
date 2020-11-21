@@ -378,6 +378,34 @@ paths:
           description: There was an error parsing the record contents and it could not be created
         "401":
           description: The Authorization header was missing or invalid
+  /records/submitted/:
+    get:
+      summary: Gets records submitted by the current user, whose access must be employee or greater
+      parameters:
+        in: header
+        name: Authorization
+          schema:
+          type: string
+          pattern: '^Bearer [A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$'
+          example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlbXBsb3llZUBlbXBsb3kuY29tIiwiYWNjZXNzIjoiZW1wbG95ZWUiLCJpYXQiOjE2MDM4MzQ4MDMsImV4cCI6MTYwMzgzODQwM30.jrsnyIwJmOM_JOFoAVi4XncSnl-loGysJ2X7Zj8ewX0.'
+      responses:
+        "200":
+          description: The request was successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  covidRecords:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CovidRecord'
+                  fireRecords:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FireRecord'
+        "403":
+          description: The user lacks employee or higher permissions.
   /admin/covid/verify/:
     get:
       summary: Validates a COVID record
