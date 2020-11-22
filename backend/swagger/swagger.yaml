@@ -384,7 +384,7 @@ paths:
       parameters:
         in: header
         name: Authorization
-          schema:
+        schema:
           type: string
           pattern: '^Bearer [A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$'
           example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlbXBsb3llZUBlbXBsb3kuY29tIiwiYWNjZXNzIjoiZW1wbG95ZWUiLCJpYXQiOjE2MDM4MzQ4MDMsImV4cCI6MTYwMzgzODQwM30.jrsnyIwJmOM_JOFoAVi4XncSnl-loGysJ2X7Zj8ewX0.'
