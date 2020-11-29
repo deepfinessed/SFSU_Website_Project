@@ -125,7 +125,7 @@ router.post('/fire/', async function(req, res, next){
 
 router.get('/submitted/', async function(req, res, next) {
   if(req.token?.access !== 'admin' && req.token?.access !== 'employee'){
-    console.log("Rejecting with token as");
+    console.log("Rejecting request to /submitted/ with token as");
     console.log(req.token);
     res.sendStatus(403);
     return;
@@ -137,7 +137,10 @@ router.get('/submitted/', async function(req, res, next) {
           email: req.token.sub,
         },
         approved: false,
-      }
+      },
+      include: {
+        county: true,
+      },
     });
     const fireRecords = await prisma.fireRecord.findMany({
       where: {
@@ -145,7 +148,10 @@ router.get('/submitted/', async function(req, res, next) {
           email: req.token.sub,
         },
         approved: false,
-      }
+      },
+      include: {
+        county: true,
+      },
     });
     const returnObj = {
       covidRecords,
