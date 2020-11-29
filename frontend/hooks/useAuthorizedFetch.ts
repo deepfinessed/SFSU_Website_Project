@@ -2,13 +2,13 @@ import { useRouter } from 'next/router';
 import { useAuth } from '@contexts/AuthContext';
 
 export default () => {
-  const [token] = useAuth();
+  const [token, , isLoading] = useAuth();
   const router = useRouter();
   const authFetch = async (
     url: string,
     options?: RequestInit
   ): Promise<Response> => {
-    if (token === undefined) {
+    if (token === undefined && !isLoading) {
       // there is no auth - we probably want to redirect to login
       router.push('/Login');
     }

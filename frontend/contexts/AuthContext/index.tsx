@@ -12,14 +12,17 @@ import refreshAccess from '../../auth/refreshAccess';
 interface AccessToken {
   accessToken: string | undefined;
   setAccessToken: (accessToken: string) => void;
+  isLoading: boolean;
+  setIsLoading: (isLoading: boolean) => void;
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-const AuthContext: React.Context<AccessToken> = createContext();
+export const AuthContext: React.Context<AccessToken> = createContext();
 
 export default ({ children }: { children: ReactNode }): JSX.Element => {
   const [accessToken, setAccessToken] = useState<string | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   /*
   TODO:
@@ -38,7 +41,9 @@ export default ({ children }: { children: ReactNode }): JSX.Element => {
         // The user does not have a valid access token
         // They could just not be logged in
       }
+      console.log("useEffect - Refreshing access - ");
       setAccessToken(token?.access_token);
+      setIsLoading(false);
     };
 
     const logout = (event: StorageEvent) => {
@@ -60,8 +65,10 @@ export default ({ children }: { children: ReactNode }): JSX.Element => {
     () => ({
       accessToken,
       setAccessToken,
+      isLoading,
+      setIsLoading,
     }),
-    [accessToken, setAccessToken]
+    [accessToken, setAccessToken, isLoading]
   );
 
   return <AuthContext.Provider value={token}>{children}</AuthContext.Provider>;
@@ -69,9 +76,14 @@ export default ({ children }: { children: ReactNode }): JSX.Element => {
 
 export const useAuth = (): [
   string | undefined,
-  (accessToken: string) => void
+  (accessToken: string) => void,
+  boolean,
+  (isLoading: boolean) => void,
 ] => {
   const context = useContext<AccessToken>(AuthContext);
-
-  return [context.accessToken, context.setAccessToken];
+  console.log("useAuth() with access token as: ");
+  console.log(context.accessToken);
+  return [context.accessToken, context.setAccessToken, context.isLoading, context.setIsLoading];
 };
+
+

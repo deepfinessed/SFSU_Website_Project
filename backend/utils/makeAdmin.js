@@ -13,6 +13,7 @@ async function makeAdminAccount(admin) {
   });
   if(oldUser){
     console.log('That email is already registered');
+    return;
   }
 
   const saltRounds = 12;
@@ -60,7 +61,7 @@ async function makeAdminFromArgs() {
   } catch (err) {
     console.log(err);
     console.log("Usage: [email] [password] [firstName] [lastName] [phone] [county]");
-    console.log("Example: admin@admin.com mypassword John Smith 5554495218 'San Mateo County'");
+    console.log('Example: admin@admin.com mypassword John Smith 5554495218 "San Mateo County"');
   }
   setTimeout(() => process.exit(0), 3000);
 }

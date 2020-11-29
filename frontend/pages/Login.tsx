@@ -1,11 +1,13 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import { Field, Formik } from 'formik';
 import { Container } from '@components/Layouts';
-import { InputField } from '@components/InputFields';  
+import { InputField } from '@components/InputFields';
 import { Text } from '@components/DataDisplay';
 import { useAuth } from '@contexts/AuthContext';
 
 const Login = (): JSX.Element => {
+  const router = useRouter();
   const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
   const url = `${baseURL}/api/users/login`;
   const [authToken, setAuthToken] = useAuth();
@@ -30,7 +32,11 @@ const Login = (): JSX.Element => {
               console.log(data);
               console.log(`authToken was ${authToken}`);
               setAuthToken(data.access_token);
-            });
+            })
+            // If login successful, redirect to home
+            .then(() => {router.push('/')})
+            // Else display a useful message, but for now we log
+            .catch((err) => console.log(err));
         }}
         initialValues={{
           email: '',
