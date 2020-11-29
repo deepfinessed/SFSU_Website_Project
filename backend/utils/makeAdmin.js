@@ -39,8 +39,8 @@ async function makeAdminAccount(admin) {
     console.log(newUser);
     if(!newUser) {
       console.log("Failed to create user: ");
-      console.log("Usage: [email] [password] [firstName] [lastName] [phone]");
-      console.log("Example: admin@admin.com mypassword John Smith 5554495218");
+      console.log("Usage: [email] [password] [firstName] [lastName] [phone] [county]");
+      console.log('Example: admin@admin.com mypassword John Smith 5554495218 "San Mateo County"');
     }
   });
 }
@@ -54,7 +54,7 @@ async function makeAdminFromArgs() {
       firstName: args[2],
       lastName: args[3],
       phone: args[4],
-      county: args[5],
+      county: args.slice(2).join(' '),
     };
     await makeAdminAccount(admin);
   } catch (err) {
