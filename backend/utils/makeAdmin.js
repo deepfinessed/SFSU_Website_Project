@@ -54,7 +54,7 @@ async function makeAdminFromArgs() {
       firstName: args[2],
       lastName: args[3],
       phone: args[4],
-      county: args.slice(2).join(' '),
+      county: args[5],
     };
     await makeAdminAccount(admin);
   } catch (err) {
