@@ -6,7 +6,7 @@ export default class GTagDocument extends Document {
   render(): JSX.Element {
     return (
       <Html>
-        {process.env.NODE_ENV === 'production' ? <Head /> :
+        {process.env.NODE_ENV !== 'production' ? <Head /> :
           <Head>
             {/* Global Analytics Tag https://analytics.google.com/analytics/web/provision/#/a184373537p254706446/admin/streams/table/2187216389 */}
             <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`} />
