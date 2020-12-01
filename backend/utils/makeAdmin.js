@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt';
 const {PrismaClient} = Prisma;
 const prisma = new PrismaClient();
 
-async function makeAdminAccount(admin) {
+export async function makeAdminAccount(admin) {
   const oldUser = await prisma.user.findOne({
     where: {
       email: admin.email,

@@ -45,7 +45,7 @@ function makeRandomCovidRecord() {
 }
 
 // creates numRecords random COVID and Fire records in each county
-async function populateRecords(numRecords) {
+async function populateRecords(numRecords, creatorEmail) {
     const counties = await prisma.county.findMany();
     for(let county of counties) {
         console.log(`Populating ${county.name}...`);
@@ -58,6 +58,11 @@ async function populateRecords(numRecords) {
                         connect: {
                             id: county.id
                         }
+                    },
+                    submitter: {
+                        connect: {
+                            email: creatorEmail,
+                        }
                     }
                 }
             });
@@ -69,6 +74,11 @@ async function populateRecords(numRecords) {
                         connect: {
                             id: county.id
                         }
+                    },
+                    submitter: {
+                        connect: {
+                            email: creatorEmail,
+                        }
                     }
                 }
             });
@@ -79,13 +89,21 @@ async function populateRecords(numRecords) {
 export default populateRecords;
 
 const args = process.argv.slice(2);
-const numRecords = args.length ? parseInt(args[0]) : 25;
+const numRecords = args.length > 1 ? parseInt(args[1]) : 25;
+const creatorEmail = args[0];
 if(numRecords == undefined) {
     console.log(`Number of records ${args[0]} could not be parsed as an integer - exiting`);
     process.exit(0);
 }
 console.log(`Creating ${numRecords} random records per county...`);
-await populateRecords(numRecords);
+try{
+    await populateRecords(numRecords, creatorEmail);
+} catch(err) {
+    console.log("There was an error: ");
+    console.log(err);
+    console.log("Usage: [creatorEmail] [numRecords]?");
+    console.log("To pass args using npm script, remember that args come after --");
+}
 console.log(`...done`);
 
 setTimeout(process.exit(0),3000);
