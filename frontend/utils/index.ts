@@ -1,4 +1,4 @@
 import theme from './theme';
 import uuid from './uuid';
-
-export { theme, uuid };
+import * as gtag from './gtag'
+export { theme, uuid, gtag};
