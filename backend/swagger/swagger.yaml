@@ -25,6 +25,13 @@ components:
         refresh_token:
           type: string
           description: Describes location of response_token in cookie.
+        role:
+          type: string
+          enum: [admin, employee, standard]
+          description: Access level of user
+        email:
+          type: string
+          description: Email of user
     RefreshTokenResponse:
       type: object
       required:

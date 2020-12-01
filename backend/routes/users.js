@@ -87,6 +87,8 @@ router.post('/login/', async function(req, res, next) {
       token_type: 'bearer',
       access_token: accessToken,
       refresh_token: 'Refresh token is in the cookie as HTTPOnly',
+      role: user.access,
+      email: user.email,
     }
     res.cookie('refresh_token', refreshToken, {
       httpOnly: true,
