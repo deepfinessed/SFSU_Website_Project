@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import { Field, Formik } from 'formik';
 import { Container } from '@components/Layouts';
 import { InputField } from '../components/InputFields';
@@ -6,6 +7,7 @@ import { Link, Text } from '@components/DataDisplay';
 import { Button } from '@components/Inputs';
 
 const Register = (): JSX.Element => {
+  const router = useRouter();
   const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
   const url = `${baseURL}/api/users/register`;
   return (
@@ -33,7 +35,11 @@ const Register = (): JSX.Element => {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data),
-          }).then((response) => console.log(response));
+          }).then((response) => console.log(response))
+            // Redirect the user to log in
+            .then(() => router.push('/login'))
+            // Should show useful feedback - for now we log
+            .catch((err) => console.log(err));
         }}
         initialValues={{
           email: '',
