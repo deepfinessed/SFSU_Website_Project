@@ -182,7 +182,7 @@ router.get('/fire/verifyall/', verifyAdmin, async function activateRecord(req, r
 
 router.get('/users/', verifyAdmin, async function(req, res, next) {
   const countyId = parseInt(req.query?.id);
-  if(isNaN(id)) {
+  if(isNaN(countyId)) {
     res.status(422).send('There is no such county');
     return;
   }
