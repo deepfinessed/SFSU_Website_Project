@@ -108,7 +108,7 @@ const VPHome = (): JSX.Element => {
   return (
     <Container align="center">
       <Text variant="h2">CSC648.02 Team 6</Text>
-      <Text variant="h3">Home test for vertical prototype</Text>
+      <Text variant="h3">Data Display</Text>
       <Text variant="h4">County:</Text>
       <input
         id="width"
@@ -126,7 +126,7 @@ const VPHome = (): JSX.Element => {
         <option value="All">All</option>
         <option value="Covid">Corona Virus</option>
         <option value="Fire">Fires</option>
-        
+
       </select>
       <div>Leave blank for list of all counties.</div>
       <Button variant="secondary" onClick={() => getCounties()}>
