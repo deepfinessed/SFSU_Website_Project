@@ -35,9 +35,10 @@ const Register = (): JSX.Element => {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data),
-          }).then((response) => console.log(response))
+          })
+            .then((response) => console.log(response))
             // Redirect the user to log in
-            .then(() => router.push('/login'))
+            .then(() => router.push('/Login'))
             // Should show useful feedback - for now we log
             .catch((err) => console.log(err));
         }}
