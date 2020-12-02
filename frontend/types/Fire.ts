@@ -1,6 +1,7 @@
 
 import County from "./County";
 interface Fire {
+  id: number;
   aqi: number;
   area: number;
   active: boolean;

@@ -14,6 +14,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import useAuthorizedFetch from "../hooks/useAuthorizedFetch";
 import {AuthContext} from "@contexts/AuthContext";
+import Button from "@components/Inputs/Button";
 
 export default (): JSX.Element => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -23,6 +24,7 @@ export default (): JSX.Element => {
   const authFetch = useAuthorizedFetch();
   const [fireArray, setFireArray] = useState<Array<Fire>>([]);
   const [covidArray, setCovidArray] = useState<Array<Covid>>([]);
+  const [numClicks, setNumClicks] = useState<number>(0);
   useEffect(() => {
     console.log("AuthLoading: ");
     console.log(isAuthLoading);
@@ -39,7 +41,17 @@ export default (): JSX.Element => {
       }
       fetchData().catch(err => console.log(err));
     }
-  }, [context.isLoading]);
+  }, [context.isLoading, numClicks]);
+  function handleDelete(type: string, id: number): () => Promise<void> {
+    return async() => {
+      try {
+        await authFetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/users/employee/${type}/delete/?id=${id}`);
+        setNumClicks(prevState => prevState + 1);
+      } catch (err) {
+        alert("There was an error deleting that record");
+      }
+    }
+  }
   type FireTableProps = {
     fireArray: Array<Fire>,
   };
@@ -60,6 +72,7 @@ export default (): JSX.Element => {
               <TableCell>Active Status</TableCell>
               <TableCell>Evacuation Level</TableCell>
               <TableCell>Approved</TableCell>
+              <TableCell>Delete</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -89,6 +102,11 @@ export default (): JSX.Element => {
                 <TableCell>
                   {fireEntry.approved.toString()}
                 </TableCell>
+                <TableCell>
+                  <Button onClick={handleDelete("fire",fireEntry.id)}>
+                    Delete
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -110,6 +128,7 @@ export default (): JSX.Element => {
               <TableCell>ICU Cases</TableCell>
               <TableCell>Deaths</TableCell>
               <TableCell>Approved</TableCell>
+              <TableCell>Delete</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -136,6 +155,11 @@ export default (): JSX.Element => {
                 </TableCell>
                 <TableCell>
                   {covidEntry.approved.toString()}
+                </TableCell>
+                <TableCell>
+                  <Button onClick={handleDelete("covid",covidEntry.id)}>
+                    Delete
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
