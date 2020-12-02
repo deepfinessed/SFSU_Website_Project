@@ -195,7 +195,7 @@ router.get('/users/', verifyAdmin, async function(req, res, next) {
         email: 'desc'
       },
     });
-    return users;
+    return res.json(users);
   } catch(err) {
     console.log(err);
     res.status(422).send(err);
