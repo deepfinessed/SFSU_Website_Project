@@ -180,4 +180,44 @@ router.get('/fire/verifyall/', verifyAdmin, async function activateRecord(req, r
   }
 });
 
+router.get('/users/', verifyAdmin, async function(req, res, next) {
+  const countyId = parseInt(req.query?.id);
+  if(isNaN(id)) {
+    res.status(422).send('There is no such county');
+    return;
+  }
+  try {
+    const users = await prisma.user.findMany({
+      where: {
+        county_id: countyId,
+      },
+      orderBy: {
+        email: 'desc'
+      },
+    });
+    return users;
+  } catch(err) {
+    console.log(err);
+    res.status(422).send(err);
+  }
+});
+
+router.delete('/users/delete/', verifyAdmin, async function(req, res, next) {
+  const userId = parseInt(router.query?.id);
+  if(isNaN(userId)) {
+    res.status(422).send('There is no valid user id');
+  }
+  try {
+    const user = await prisma.user.delete({
+      where: {
+        id: userId,
+      }
+    });
+    res.sendStatus(200);
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(404);
+  }
+});
+
 export default router;
