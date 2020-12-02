@@ -180,4 +180,78 @@ router.post('/employee/register/', verifyJWT, async function (req, res, next) {
   res.sendStatus(201);
 });
 
+router.get('/employee/covid/delete/', verifyJWT, async function(req, res, next) {
+  if(req.token?.access !== 'admin' && req?.token.access !== 'employee') {
+    res.sendStatus(403);
+    return;
+  }
+  const recordId = parseInt(req.query?.id);
+  if(isNaN(recordId)){
+    res.sendStatus(422);
+    return;
+  }
+  try {
+    const record = await prisma.covidRecord.findOne({
+      where: {
+        id: recordId,
+      },
+      include: {
+        submitter: true,
+      }
+    });
+    if(record) {
+      if(record.submitter.email !== req.token?.sub) {
+        res.sendStatus(403);
+        return;
+      }
+      await prisma.covidRecord.delete({
+        where: {
+          id: recordId,
+        }
+      });
+      res.sendStatus(200);
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(422).send(err);
+  }
+});
+
+router.get('/employee/fire/delete/', verifyJWT, async function(req, res, next) {
+  if(req.token?.access !== 'admin' && req?.token.access !== 'employee') {
+    res.sendStatus(403);
+    return;
+  }
+  const recordId = parseInt(req.query?.id);
+  if(isNaN(recordId)){
+    res.sendStatus(422);
+    return;
+  }
+  try {
+    const record = await prisma.fireRecord.findOne({
+      where: {
+        id: recordId,
+      },
+      include: {
+        submitter: true,
+      }
+    });
+    if(record) {
+      if(record.submitter.email !== req.token?.sub) {
+        res.sendStatus(403);
+        return;
+      }
+      await prisma.fireRecord.delete({
+        where: {
+          id: recordId,
+        }
+      });
+      res.sendStatus(200);
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(422).send(err);
+  }
+});
+
 export default router;
