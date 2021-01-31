@@ -1,11 +1,12 @@
-# Backend Folder
+# CSC 648 Project
 
-## Purpose
-The purpose of this folder is to store all the source code and related files for your team's application. Source code MUST NOT be in any of folder. <strong>YOU HAVE BEEN WARNED</strong>
+## Description
 
-You are free to organize the contents of the folder as you see fit. But remember your team is graded on how you use Git. This does include the structure of your application. Points will be deducted from poorly structured application folders.
+This application was part of a group project to create a monitoring app for COVID and fire statistics in the state of California. This is a subtree omitting the AWS Credentials (which I would not want in source control anyway, but was required to post as part of the assignment).
 
-## Please use the rest of the README.md to store important information for your team's application.
+The application requires Docker as a dependency. Other than this note, everything is as it was when the project was submitted. For ease of use, sample credentials are included in an environment file so the app 'works' out of the box, though normally such credentials would be omitted from source control.
+
+## Instructions
 
 To launch the app locally, use
 
